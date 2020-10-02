@@ -2,7 +2,7 @@
 
 namespace BowlingWebApplication.Services
 {
-    public class SpareService : ISpareService
+    public class SpareScoringService : ISpareScoringService
     {
         public int AvgPercentOfTimeTrue { get; set; } = 30;
         public bool TestForSpare()

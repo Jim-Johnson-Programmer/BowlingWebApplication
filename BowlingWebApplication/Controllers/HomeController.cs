@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BowlingWebApplication.Models;
+using BowlingWebApplication.Models.ViewModel;
+using BowlingWebApplication.Services;
 
 namespace BowlingWebApplication.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IFrameScoringService _frameScoringService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IFrameScoringService frameScoringService)
         {
             _logger = logger;
+            _frameScoringService = frameScoringService;
         }
 
         public IActionResult Index()
@@ -36,6 +40,9 @@ namespace BowlingWebApplication.Controllers
 
         public IActionResult BowlingGame()
         {
+            BowlingGameViewModel viewModel = new BowlingGameViewModel();
+            _frameScoringService.
+
             return View();
         }
     }

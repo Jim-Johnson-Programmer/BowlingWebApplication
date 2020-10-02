@@ -7,6 +7,11 @@ namespace BowlingWebApplication.Models.ViewModel
 {
     public class BowlingGameViewModel
     {
+        private UserGameInfo _GameInformation;
 
+        public BowlingGameViewModel()
+        {
+            _GameInformation = new UserGameInfo();
+        }
     }
 }

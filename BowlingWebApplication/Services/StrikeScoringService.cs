@@ -2,7 +2,7 @@
 
 namespace BowlingWebApplication.Services
 {
-    public class StrikeService : IStrikeService
+    public class StrikeScoringService : IStrikeScoringService
     {
         public int AvgPercentOfTimeTrue { get; set; } = 20;
         public bool TestForStrike()

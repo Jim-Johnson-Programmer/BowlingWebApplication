@@ -1,8 +1,8 @@
 ﻿namespace BowlingWebApplication.Services
 {
-    public interface ISpareService
+    public interface IStrikeScoringService
     {
         int AvgPercentOfTimeTrue { get; set; }
-        bool TestForSpare();
+        bool TestForStrike();
     }
 }
