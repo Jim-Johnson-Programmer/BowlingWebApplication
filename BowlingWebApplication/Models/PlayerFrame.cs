@@ -6,8 +6,8 @@ namespace BowlingWebApplication.Models
     {
         public int FrameId { get; set; }
         public bool IsFirstDeliveryStrike { get; set; } 
-        public bool IsSpare { get; set; }
-        public bool IsSplit { get; set; }
+        public bool IsSecondDeliverySpare { get; set; }
+        public bool IsFirstDeliverySplit { get; set; }
         public bool FirstDeliveryCompleted { get; set; } 
         public int FirstDeliveryScore { get; set; }
         public bool IsFoulFirstDelivery { get; set; } 

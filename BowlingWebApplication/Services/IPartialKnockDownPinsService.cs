@@ -3,9 +3,10 @@ using BowlingWebApplication.Models;
 
 namespace BowlingWebApplication.Services
 {
-    public interface IStrikeScoringService
+    public interface IPartialKnockDownPinsService
     {
-        int AvgPercentOfTimeTrue { get; set; }
+        //int AvgPercentOfTimeTrue { get; set; }
         void CheckAndScoreFirstDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex);
+        void CheckAndScoreSecondDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex);
     }
 }

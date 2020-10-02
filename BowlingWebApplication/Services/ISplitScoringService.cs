@@ -3,7 +3,7 @@ using BowlingWebApplication.Models;
 
 namespace BowlingWebApplication.Services
 {
-    public interface IStrikeScoringService
+    public interface ISplitScoringService
     {
         int AvgPercentOfTimeTrue { get; set; }
         void CheckAndScoreFirstDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex);

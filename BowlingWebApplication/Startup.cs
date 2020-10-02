@@ -24,6 +24,8 @@ namespace BowlingWebApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IAllPinsMissedService, AllPinsMissedService>();
+            services.AddTransient<IPartialKnockDownPinsService, PartialKnockDownPinsService>();
             services.AddTransient<IFoulScoringService, FoulScoringService>();
             services.AddTransient<IStrikeScoringService, StrikeScoringService>();
             services.AddTransient<ISpareScoringService, SpareScoringService>();

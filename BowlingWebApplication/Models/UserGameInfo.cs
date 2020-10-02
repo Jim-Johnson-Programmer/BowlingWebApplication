@@ -7,7 +7,7 @@ namespace BowlingWebApplication.Models
     {
         public UserGameInfo()
         {
-            CurrentFrameCount = 1;
+            CurrentProcessingFrameIndex = 1;
             FirstName = String.Empty;
             LastName = string.Empty;
             DeliveryFrames = new List<PlayerFrame>(10);
@@ -22,7 +22,7 @@ namespace BowlingWebApplication.Models
 
         public string FirstName { get; set; } 
         public string LastName { get; set; } 
-        public int CurrentFrameCount { get; set; }
+        public int CurrentProcessingFrameIndex { get; set; }
         public bool IsExtraFramesQualified { get; set; }
         public List<PlayerFrame> DeliveryFrames { get; set; } 
         public List<PlayerFrame> TenthFrameExtraFrames { get; set; } 

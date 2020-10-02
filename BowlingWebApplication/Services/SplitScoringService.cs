@@ -4,23 +4,29 @@ using BowlingWebApplication.Models;
 
 namespace BowlingWebApplication.Services
 {
-    public class StrikeScoringService : IStrikeScoringService
+    public class SplitScoringService : ISplitScoringService
     {
-        public int AvgPercentOfTimeTrue { get; set; } = 20;
-        public bool TestForStrike()
+        public int AvgPercentOfTimeTrue { get; set; } = 60;
+
+        private bool TestForSplit()
         {
             Random rnd = new Random();
             int number = rnd.Next(1, 100);
             return number < AvgPercentOfTimeTrue ? true : false;
         }
 
+        private int GetTotalPinsKnockedDown()
+        {
+            Random rnd = new Random();
+            int number = rnd.Next(1, 11);
+            return number;
+        }
+
         public void CheckAndScoreFirstDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex)
         {
-            if (TestForStrike())
+            if (TestForSplit())
             {
-                inputPlayerFrames[currentIndex].IsFirstDeliveryStrike = true;
-                inputPlayerFrames[currentIndex].FirstDeliveryScore = 10;
-                inputPlayerFrames[currentIndex].FirstDeliveryCompleted = true;
+                inputPlayerFrames[currentIndex].IsFirstDeliverySplit = true;
             }
         }
     }

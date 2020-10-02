@@ -22,7 +22,7 @@ namespace BowlingWebApplication.Services
             {
                 inputPlayerFrames[currentIndex].IsFoulFirstDelivery = true;
                 inputPlayerFrames[currentIndex].FirstDeliveryScore = 0;
-                inputPlayerFrames[currentIndex].FirstDeliveryMark = "F";
+                //inputPlayerFrames[currentIndex].FirstDeliveryMark = "F";
                 inputPlayerFrames[currentIndex].FirstDeliveryCompleted = true;
             }
         }

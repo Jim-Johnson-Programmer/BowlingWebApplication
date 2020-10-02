@@ -28,14 +28,17 @@ namespace BowlingWebApplication.Services
             if (TestFirstDelivery())
             {
                 inputPlayerFrames[currentIndex].FirstDeliveryCompleted = true;
-                inputPlayerFrames[currentIndex].FirstDeliveryMark = string.Empty;
                 inputPlayerFrames[currentIndex].FirstDeliveryScore = 0;
             }
         }
 
         public void CheckAndScoreSecondDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex)
         {
-
+            if (TestSecondDelivery())
+            {
+                inputPlayerFrames[currentIndex].SecondDeliveryCompleted = true;
+                inputPlayerFrames[currentIndex].SecondDeliveryScore = 0;
+            }
         }
     }
 }
