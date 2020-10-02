@@ -36,7 +36,7 @@ namespace BowlingWebApplication.Services
         {
             if (TestSecondDelivery())
             {
-                inputPlayerFrames[currentIndex].SecondDeliveryCompleted = true;
+                inputPlayerFrames[currentIndex].IsSecondDeliveryCompleted = true;
                 inputPlayerFrames[currentIndex].SecondDeliveryScore = 0;
             }
         }

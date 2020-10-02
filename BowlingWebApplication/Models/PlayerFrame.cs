@@ -10,9 +10,9 @@ namespace BowlingWebApplication.Models
         public bool IsFirstDeliverySplit { get; set; }
         public bool IsFirstDeliveryCompleted { get; set; } 
         public int FirstDeliveryScore { get; set; }
-        public bool IsFoulFirstDelivery { get; set; } 
+        public bool IsFirstDeliveryFoul { get; set; } 
         public string FirstDeliveryMark { get; set; } = string.Empty;
-        public bool SecondDeliveryCompleted { get; set; } = false;
+        public bool IsSecondDeliveryCompleted { get; set; } = false;
         public int SecondDeliveryScore { get; set; }
         public bool IsFoulSecondDelivery { get; set; }
         public string SecondDeliveryMark { get; set; } = string.Empty;

@@ -16,7 +16,7 @@ namespace BowlingWebApplication.Services
         {
             if (!inputPlayerFrames[currentIndex].IsFirstDeliveryCompleted &&
                 !inputPlayerFrames[currentIndex].IsFirstDeliveryStrike &&
-                !inputPlayerFrames[currentIndex].IsFoulFirstDelivery)
+                !inputPlayerFrames[currentIndex].IsFirstDeliveryFoul)
             {
                 inputPlayerFrames[currentIndex].FirstDeliveryScore = GetTotalPinsKnockedDown();
             }

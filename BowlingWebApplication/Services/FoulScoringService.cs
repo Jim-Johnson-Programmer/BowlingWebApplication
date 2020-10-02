@@ -20,7 +20,7 @@ namespace BowlingWebApplication.Services
         {
             if (TestForFoul())
             {
-                inputPlayerFrames[currentIndex].IsFoulFirstDelivery = true;
+                inputPlayerFrames[currentIndex].IsFirstDeliveryFoul = true;
                 inputPlayerFrames[currentIndex].FirstDeliveryScore = 0;
                 inputPlayerFrames[currentIndex].FirstDeliveryMark = "F";
                 inputPlayerFrames[currentIndex].IsFirstDeliveryCompleted = true;
@@ -34,7 +34,7 @@ namespace BowlingWebApplication.Services
                 inputPlayerFrames[currentIndex].IsFoulSecondDelivery = true;
                 inputPlayerFrames[currentIndex].SecondDeliveryScore = 0;
                 inputPlayerFrames[currentIndex].SecondDeliveryMark = "F";
-                inputPlayerFrames[currentIndex].SecondDeliveryCompleted = true;
+                inputPlayerFrames[currentIndex].IsSecondDeliveryCompleted = true;
             }
         }
     }
