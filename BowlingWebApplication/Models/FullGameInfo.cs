@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace BowlingWebApplication.Models
 {
-    public class FullGameInfo
+    public static class FullGameInfo
     {
-        public List<UserGameInfo> GameUserScores { get; set; } = new List<UserGameInfo>();
+        public static List<UserGameInfo> GameUserScores { get; set; } = new List<UserGameInfo>();
     }
 }
