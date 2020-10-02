@@ -10,7 +10,7 @@ namespace BowlingWebApplication.Models
             FirstName = String.Empty;
             LastName = string.Empty;
             DeliveryFrames = new List<PlayerFrame>(10);
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i <= 10; i++)
             {
                 DeliveryFrames.Add(new PlayerFrame(){FrameId = i});
             }

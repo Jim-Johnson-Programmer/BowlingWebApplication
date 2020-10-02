@@ -18,7 +18,7 @@ namespace BowlingWebApplication.Services
 
         public void CheckAndScoreFirstDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex)
         {
-            if (TestForFoul())
+            if (TestForFoul() && !inputPlayerFrames[currentIndex].IsFirstDeliveryCompleted)
             {
                 inputPlayerFrames[currentIndex].IsFirstDeliveryFoul = true;
                 inputPlayerFrames[currentIndex].FirstDeliveryScore = 0;
@@ -29,7 +29,9 @@ namespace BowlingWebApplication.Services
 
         public void CheckAndScoreSecondDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex)
         {
-            if (TestForFoul())
+            if (TestForFoul() &&
+                !inputPlayerFrames[currentIndex].IsFirstDeliveryStrike && 
+                !inputPlayerFrames[currentIndex].IsSecondDeliveryCompleted)
             {
                 inputPlayerFrames[currentIndex].IsSecondDeliveryFoul = true;
                 inputPlayerFrames[currentIndex].SecondDeliveryScore = 0;

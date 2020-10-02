@@ -16,7 +16,7 @@ namespace BowlingWebApplication.Services
 
         public void CheckAndScoreFirstDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex)
         {
-            if (TestForStrike())
+            if (TestForStrike() && !inputPlayerFrames[currentIndex].IsFirstDeliveryCompleted)
             {
                 inputPlayerFrames[currentIndex].IsFirstDeliveryStrike = true;
                 inputPlayerFrames[currentIndex].FirstDeliveryScore = 10;
@@ -24,5 +24,40 @@ namespace BowlingWebApplication.Services
                 inputPlayerFrames[currentIndex].IsFirstDeliveryCompleted = true;
             }
         }
+
+        public void TenthFrameFirstDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex)
+        {
+            if (TestForStrike())
+            {
+                inputPlayerFrames[currentIndex].IsFirstDeliveryStrike = true;
+                inputPlayerFrames[currentIndex].FirstDeliveryScore = 10;
+                inputPlayerFrames[currentIndex].FirstDeliveryMark = "X";
+                inputPlayerFrames[currentIndex].IsFirstDeliveryCompleted = true;
+                inputPlayerFrames[currentIndex].IsTenthFrameThirdDeliveryEligible = true;
+            }
+        }
+
+        public void TenthFrameSecondDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex)
+        {
+            if (TestForStrike())
+            {
+                inputPlayerFrames[currentIndex].IsSecondDeliveryStrikeInTenthFrame = true;
+                inputPlayerFrames[currentIndex].SecondDeliveryScore = 10;
+                inputPlayerFrames[currentIndex].SecondDeliveryMark = "X";
+                inputPlayerFrames[currentIndex].IsSecondDeliveryCompleted = true;
+                inputPlayerFrames[currentIndex].IsTenthFrameThirdDeliveryEligible = true;
+            }
+        }
+
+        public void TenthFrameThirdDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex)
+        {
+            if (TestForStrike())
+            {
+                inputPlayerFrames[currentIndex].IsThirdDeliveryStrikeInTenthFrame = true;
+                inputPlayerFrames[currentIndex].TenthFrameThirdDeliveryScore = 10;
+                inputPlayerFrames[currentIndex].TenthFrameThirdDeliveryMark = "X";
+            }
+        }
+
     }
 }

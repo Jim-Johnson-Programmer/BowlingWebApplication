@@ -16,7 +16,23 @@ namespace BowlingWebApplication.Services
 
         public void ScoreSecondDeliverySpare(List<PlayerFrame> inputPlayerFrames, int currentIndex)
         {
-            if (TestForSpare())
+            if (TestForSpare() &&
+                !inputPlayerFrames[currentIndex].IsSecondDeliveryCompleted &&
+                !inputPlayerFrames[currentIndex].IsFirstDeliveryStrike)
+            {
+                inputPlayerFrames[currentIndex].IsSecondDeliverySpare = true;
+                inputPlayerFrames[currentIndex].SecondDeliveryMark = "/";
+                inputPlayerFrames[currentIndex].SecondDeliveryScore =
+                    10 - inputPlayerFrames[currentIndex].FirstDeliveryScore;
+            }
+
+        }
+
+        public void TenthFrameFirstDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex)
+        {
+            if (TestForSpare() &&
+                !inputPlayerFrames[currentIndex].IsFirstDeliveryStrike &&
+                !inputPlayerFrames[currentIndex].IsSecondDeliveryStrikeInTenthFrame)
             {
                 inputPlayerFrames[currentIndex].IsSecondDeliverySpare = true;
                 inputPlayerFrames[currentIndex].SecondDeliveryMark = "/";

@@ -5,7 +5,8 @@ namespace BowlingWebApplication.Services
 {
     public interface IPartialKnockDownPinsService
     {
-        //int AvgPercentOfTimeTrue { get; set; }
+        int AvgPercentIsASplit { get; set; }
+        int AvgPercentIsLessThanTen { get; set; }
         void CheckAndScoreFirstDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex);
         void CheckAndScoreSecondDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex);
     }

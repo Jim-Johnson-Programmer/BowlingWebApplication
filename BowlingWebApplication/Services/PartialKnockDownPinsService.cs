@@ -7,6 +7,7 @@ namespace BowlingWebApplication.Services
     public class PartialKnockDownPinsService : IPartialKnockDownPinsService
     {
         public int AvgPercentIsASplit { get; set; } = 60;
+        public int AvgPercentIsLessThanTen { get; set; } = 60;
 
         private bool TestForSplit()
         {
@@ -15,17 +16,25 @@ namespace BowlingWebApplication.Services
             return number < AvgPercentIsASplit ? true : false;
         }
 
-        private int GetTotalPinsKnockedDown()
+        private bool TestForLessThanTen()
         {
             Random rnd = new Random();
-            return rnd.Next(1, 10);
+            int number = rnd.Next(1, 100);
+            return number < AvgPercentIsLessThanTen ? true : false;
+        }
+
+        //pins knocked down must be less than 10 for entire frame from either 9pins
+        //or < than prev delivery... spare tested and rejected previously
+        private int GetTotalPinsKnockedDown(int prevDeliveryScore = 10)
+        {
+            Random rnd = new Random();
+            return rnd.Next(1, prevDeliveryScore);
         }
 
         public void CheckAndScoreFirstDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex)
         {
-            if (!inputPlayerFrames[currentIndex].IsFirstDeliveryCompleted &&
-                !inputPlayerFrames[currentIndex].IsFirstDeliveryStrike &&
-                !inputPlayerFrames[currentIndex].IsFirstDeliveryFoul)
+            if (TestForLessThanTen() && 
+                !inputPlayerFrames[currentIndex].IsFirstDeliveryCompleted)
             {
                 inputPlayerFrames[currentIndex].FirstDeliveryScore = GetTotalPinsKnockedDown();
 
@@ -39,7 +48,15 @@ namespace BowlingWebApplication.Services
 
         public void CheckAndScoreSecondDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex)
         {
+            if (TestForLessThanTen() &&
+                !inputPlayerFrames[currentIndex].IsSecondDeliveryCompleted &&
+                !inputPlayerFrames[currentIndex].IsFirstDeliveryStrike &&
+                !inputPlayerFrames[currentIndex].IsSecondDeliverySpare)
+            {
+                inputPlayerFrames[currentIndex].SecondDeliveryScore = 
+                    GetTotalPinsKnockedDown(inputPlayerFrames[currentIndex].FirstDeliveryScore);
 
+            }
         }
     }
 }

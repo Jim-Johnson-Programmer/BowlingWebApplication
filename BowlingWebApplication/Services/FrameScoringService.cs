@@ -37,8 +37,6 @@ namespace BowlingWebApplication.Services
                     .IsFirstDeliveryStrike)
                     SecondDelivery(userGameInfo.DeliveryFrames, userGameInfo.CurrentProcessingFrameIndex);
 
-                //ScoreFrameTotal(userGameInfo.DeliveryFrames, userGameInfo.CurrentProcessingFrameIndex);
-
                 userGameInfo.CurrentProcessingFrameIndex++;
             }
         }
@@ -46,22 +44,18 @@ namespace BowlingWebApplication.Services
         private void FirstDelivery(List<PlayerFrame> deliveryFrames, int currentFrameIndex)
         {
             _foulService.CheckAndScoreFirstDelivery(deliveryFrames, currentFrameIndex);
-
             //slim possibility of gutter or severe error on delivery
             _allPinsMissedService.CheckAndScoreFirstDelivery(deliveryFrames, currentFrameIndex);
-
             _strikeService.CheckAndScoreFirstDelivery(deliveryFrames, currentFrameIndex);
-
             _partialKnockDownPinsService.CheckAndScoreFirstDelivery(deliveryFrames, currentFrameIndex);
         }
 
         private void SecondDelivery(List<PlayerFrame> deliveryFrames, int currentFrameIndex)
         {
             _foulService.CheckAndScoreSecondDelivery(deliveryFrames, currentFrameIndex);
-
             _allPinsMissedService.CheckAndScoreSecondDelivery(deliveryFrames, currentFrameIndex);
-
             _spareService.ScoreSecondDeliverySpare(deliveryFrames, currentFrameIndex);
+            _partialKnockDownPinsService.CheckAndScoreSecondDelivery(deliveryFrames, currentFrameIndex);
         }
 
         public void FirstExtraDelivery()
@@ -76,30 +70,35 @@ namespace BowlingWebApplication.Services
 
         }
 
-        private void ScoreFrameTotal(List<PlayerFrame> deliveryFrames,
-            int currentFrameIndex)
+        private void PopulateFrameTotals(List<PlayerFrame> deliveryFrames)
         {
-            if (currentFrameIndex<10)
+            for (int index = 0; index <= 10; index++)
             {
-                if (deliveryFrames[currentFrameIndex - 1].IsFirstDeliveryStrike)
+                if (deliveryFrames[index].IsFirstDeliveryStrike)
                 {
-                    //10 plus next two deliveries
-                    deliveryFrames[currentFrameIndex - 1].CumulativeScore = 10 +
-                        deliveryFrames[currentFrameIndex - 2].CumulativeScore + 
-                        deliveryFrames[currentFrameIndex].FirstDeliveryScore +
-                        deliveryFrames[currentFrameIndex].SecondDeliveryScore;
+                    deliveryFrames[index].CumulativeScore = 10 +
+                           deliveryFrames[index+1].FirstDeliveryScore +
+                           deliveryFrames[index+1].SecondDeliveryScore;
                 }
-                else if (deliveryFrames[currentFrameIndex - 1].IsSecondDeliverySpare)
+                else if (deliveryFrames[index].IsSecondDeliverySpare)
                 {
-                    //10 plus next delivery
-                    deliveryFrames[currentFrameIndex - 1].CumulativeScore = 10 +
-                       deliveryFrames[currentFrameIndex - 2].CumulativeScore +
-                       deliveryFrames[currentFrameIndex].FirstDeliveryScore;
+                    deliveryFrames[index].CumulativeScore = 10 +
+                            deliveryFrames[index+1].FirstDeliveryScore;
+                }
+                else if (index==10)
+                {
+                    deliveryFrames[index].CumulativeScore =
+                        deliveryFrames[index].FirstDeliveryScore +
+                        deliveryFrames[index].SecondDeliveryScore +
+                        deliveryFrames[index].TenthFrameThirdDeliveryScore;
+                        //third delivery will be zero if not used
                 }
                 else
                 {
-                    //add  current deliveries 
-                } 
+                    deliveryFrames[index].CumulativeScore = 
+                            deliveryFrames[index].FirstDeliveryScore +
+                            deliveryFrames[index].SecondDeliveryScore;
+                }
             }
         }
     }
