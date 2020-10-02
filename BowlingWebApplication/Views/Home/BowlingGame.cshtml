@@ -1,4 +1,4 @@
-﻿
+﻿@model BowlingWebApplication.Models.FullGameInfo
 @{
 }
 <html>
@@ -26,17 +26,38 @@
             margin-left: 100%;
         }
 
-        .player-second-turn-score-box {
+        .player-first-turn-score-box {
             width: auto;
             font-weight: bold;
             padding-right: 1em;
         }
 
-        .player-first-turn-score-box {
+        .player-second-turn-score-box {
             border-left-style: solid;
             border-bottom-style: solid;
             font-weight: bold;
             width: 2em;
+        }
+
+        .player-first-tenth-turn-score-box {
+            border-left-style: solid;
+            border-bottom-style: solid;
+            font-weight: bold;
+            width: 3em;
+        }
+
+        .player-second-tenth-turn-score-box {
+            border-left-style: solid;
+            border-bottom-style: solid;
+            font-weight: bold;
+            width: 2em;
+        }
+
+        .player-third-tenth-turn-score-box {
+            border-left-style: solid;
+            border-bottom-style: solid;
+            font-weight: bold;
+            width: 3em;
         }
 
         .cumuluative-scoring-box {
@@ -71,101 +92,35 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td class="solid-margin font-weight-bold player-name-box" >
-                <div>Jim Johnson</div>
-            </td>
-            <td class="parent-scoring-element">
-                <div class="d-flex flex-nowrap float-right player-turn-row">
-                    <div class="player-second-turn-score-box">S9</div>
-                    <div class="player-first-turn-score-box">X</div>
-                </div>
-                <div class="float-none cumuluative-scoring-box">
-                    <div class="font-weight-bold">100</div>
-                </div>
-            </td>
-            <td class="parent-scoring-element">
-                <div class="d-flex flex-nowrap float-right player-turn-row">
-                    <div class="player-second-turn-score-box">S9</div>
-                    <div class="player-first-turn-score-box">X</div>
-                </div>
-                <div class="float-none cumuluative-scoring-box">
-                    <div class="font-weight-bold">100</div>
-                </div>
-            </td>
-            <td class="parent-scoring-element">
-                <div class="d-flex flex-nowrap float-right player-turn-row">
-                    <div class="player-second-turn-score-box">S9</div>
-                    <div class="player-first-turn-score-box">X</div>
-                </div>
-                <div class="float-none cumuluative-scoring-box">
-                    <div class="font-weight-bold">100</div>
-                </div>
-            </td>
-            <td class="parent-scoring-element">
-                <div class="d-flex flex-nowrap float-right player-turn-row">
-                    <div class="player-second-turn-score-box">S9</div>
-                    <div class="player-first-turn-score-box">X</div>
-                </div>
-                <div class="float-none cumuluative-scoring-box">
-                    <div class="font-weight-bold">100</div>
-                </div>
-            </td>
-            <td class="parent-scoring-element">
-                <div class="d-flex flex-nowrap float-right player-turn-row">
-                    <div class="player-second-turn-score-box">S9</div>
-                    <div class="player-first-turn-score-box">X</div>
-                </div>
-                <div class="float-none cumuluative-scoring-box">
-                    <div class="font-weight-bold">100</div>
-                </div>
-            </td>
-            <td class="parent-scoring-element">
-                <div class="d-flex flex-nowrap float-right player-turn-row">
-                    <div class="player-second-turn-score-box">S9</div>
-                    <div class="player-first-turn-score-box">X</div>
-                </div>
-                <div class="float-none cumuluative-scoring-box">
-                    <div class="font-weight-bold">100</div>
-                </div>
-            </td>
-            <td class="parent-scoring-element">
-                <div class="d-flex flex-nowrap float-right player-turn-row">
-                    <div class="player-second-turn-score-box">S9</div>
-                    <div class="player-first-turn-score-box">X</div>
-                </div>
-                <div class="float-none cumuluative-scoring-box">
-                    <div class="font-weight-bold">100</div>
-                </div>
-            </td>
-            <td class="parent-scoring-element">
-                <div class="d-flex flex-nowrap float-right player-turn-row">
-                    <div class="player-second-turn-score-box">S9</div>
-                    <div class="player-first-turn-score-box">X</div>
-                </div>
-                <div class="float-none cumuluative-scoring-box">
-                    <div class="font-weight-bold">100</div>
-                </div>
-            </td>
-            <td class="parent-scoring-element">
-                <div class="d-flex flex-nowrap float-right player-turn-row">
-                    <div class="player-second-turn-score-box">S9</div>
-                    <div class="player-first-turn-score-box">X</div>
-                </div>
-                <div class="float-none cumuluative-scoring-box">
-                    <div class="font-weight-bold">100</div>
-                </div>
-            </td>
-            <td class="parent-scoring-element">
-                <div class="d-flex flex-nowrap float-right player-turn-row">
-                    <div class="player-second-turn-score-box">S9</div>
-                    <div class="player-first-turn-score-box">X</div>
-                </div>
-                <div class="float-none cumuluative-scoring-box">
-                    <div class="font-weight-bold">100</div>
-                </div>
-            </td>
-        </tr>
+        @foreach (var playerInfo in Model.GamePlayers)
+        {
+            <tr>
+                <td class="solid-margin font-weight-bold player-name-box">
+                    <div>@playerInfo.FirstName @playerInfo.LastName</div>
+                </td>
+                @foreach (var frameInfo in playerInfo.DeliveryFrames)
+                {
+                    <td class="parent-scoring-element">
+                        <div class="d-flex flex-nowrap float-right player-turn-row">
+                            @if (frameInfo.FrameId < 10)
+                            {
+                                <div class="player-first-turn-score-box">@frameInfo.FirstDeliveryMark</div>    
+                                <div class="player-second-turn-score-box">@frameInfo.SecondDeliveryMark</div>
+                            }
+                            else
+                            {
+                                <div class="player-first-tenth-turn-score-box">@frameInfo.FirstDeliveryMark</div>
+                                <div class="player-second-tenth-turn-score-box">@frameInfo.SecondDeliveryMark</div>
+                                <div class="player-third-tenth-turn-score-box">@frameInfo.ThirdDeliveryMark</div>
+                            }
+                        </div>
+                        <div class="float-none cumuluative-scoring-box">
+                            <div class="font-weight-bold">@frameInfo.CumulativeScore.ToString()</div>
+                        </div>
+                    </td>
+                }
+            </tr>
+        }
         </tbody>
     </table>
 </div>

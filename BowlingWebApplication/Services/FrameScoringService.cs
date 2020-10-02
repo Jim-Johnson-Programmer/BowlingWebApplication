@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Threading.Tasks;
 using BowlingWebApplication.Models;
 
@@ -26,49 +27,41 @@ namespace BowlingWebApplication.Services
             _partialKnockDownPinsService = partialKnockDownPinsService;
         }
 
-        public void AllPlayersBowlAFrame(List<UserGameInfo> allUsersGameInfo)
+        public void AllPlayersBowlNextFrame(List<UserGameInfo> allUsersGameInfo)
         {
             foreach (UserGameInfo userGameInfo in allUsersGameInfo)
             { 
-                FirstDelivery(userGameInfo);
-                SecondDelivery(userGameInfo);
- 
-                //SetupFrameDeliveryMarks(userGameInfo.DeliveryFrames,
-                //    userGameInfo.CurrentProcessingFrameIndex);
+                FirstDelivery(userGameInfo.DeliveryFrames, userGameInfo.CurrentProcessingFrameIndex);
 
-                //ScoreFrameTotal(userGameInfo.DeliveryFrames,
-                //    userGameInfo.CurrentProcessingFrameIndex);
-                
+                if(!userGameInfo.DeliveryFrames[userGameInfo.CurrentProcessingFrameIndex]
+                    .IsFirstDeliveryStrike)
+                    SecondDelivery(userGameInfo.DeliveryFrames, userGameInfo.CurrentProcessingFrameIndex);
+
+                //ScoreFrameTotal(userGameInfo.DeliveryFrames, userGameInfo.CurrentProcessingFrameIndex);
+
                 userGameInfo.CurrentProcessingFrameIndex++;
             }
         }
 
-        public void FirstDelivery(UserGameInfo inputUserGameInfo)
+        private void FirstDelivery(List<PlayerFrame> deliveryFrames, int currentFrameIndex)
         {
-            _foulService.CheckAndScoreFirstDelivery(inputUserGameInfo.DeliveryFrames, 
-                inputUserGameInfo.CurrentProcessingFrameIndex);
+            _foulService.CheckAndScoreFirstDelivery(deliveryFrames, currentFrameIndex);
 
             //slim possibility of gutter or severe error on delivery
-            _allPinsMissedService.CheckAndScoreFirstDelivery(inputUserGameInfo.DeliveryFrames, 
-                inputUserGameInfo.CurrentProcessingFrameIndex);
+            _allPinsMissedService.CheckAndScoreFirstDelivery(deliveryFrames, currentFrameIndex);
 
-            _strikeService.CheckAndScoreFirstDelivery(inputUserGameInfo.DeliveryFrames,
-                inputUserGameInfo.CurrentProcessingFrameIndex);
+            _strikeService.CheckAndScoreFirstDelivery(deliveryFrames, currentFrameIndex);
 
-            _partialKnockDownPinsService.CheckAndScoreFirstDelivery(inputUserGameInfo.DeliveryFrames,
-                inputUserGameInfo.CurrentProcessingFrameIndex);
+            _partialKnockDownPinsService.CheckAndScoreFirstDelivery(deliveryFrames, currentFrameIndex);
         }
 
-        public void SecondDelivery(UserGameInfo inputUserGameInfo)
+        private void SecondDelivery(List<PlayerFrame> deliveryFrames, int currentFrameIndex)
         {
-            _foulService.CheckAndScoreSecondDelivery(inputUserGameInfo.DeliveryFrames,
-                inputUserGameInfo.CurrentProcessingFrameIndex);
+            _foulService.CheckAndScoreSecondDelivery(deliveryFrames, currentFrameIndex);
 
-            _allPinsMissedService.CheckAndScoreSecondDelivery(inputUserGameInfo.DeliveryFrames,
-                inputUserGameInfo.CurrentProcessingFrameIndex);
+            _allPinsMissedService.CheckAndScoreSecondDelivery(deliveryFrames, currentFrameIndex);
 
-            _spareService.ScoreSecondDeliverySpare(inputUserGameInfo.DeliveryFrames,
-                inputUserGameInfo.CurrentProcessingFrameIndex);
+            _spareService.ScoreSecondDeliverySpare(deliveryFrames, currentFrameIndex);
         }
 
         public void FirstExtraDelivery()
@@ -86,7 +79,28 @@ namespace BowlingWebApplication.Services
         private void ScoreFrameTotal(List<PlayerFrame> deliveryFrames,
             int currentFrameIndex)
         {
-
+            if (currentFrameIndex<10)
+            {
+                if (deliveryFrames[currentFrameIndex - 1].IsFirstDeliveryStrike)
+                {
+                    //10 plus next two deliveries
+                    deliveryFrames[currentFrameIndex - 1].CumulativeScore = 10 +
+                        deliveryFrames[currentFrameIndex - 2].CumulativeScore + 
+                        deliveryFrames[currentFrameIndex].FirstDeliveryScore +
+                        deliveryFrames[currentFrameIndex].SecondDeliveryScore;
+                }
+                else if (deliveryFrames[currentFrameIndex - 1].IsSecondDeliverySpare)
+                {
+                    //10 plus next delivery
+                    deliveryFrames[currentFrameIndex - 1].CumulativeScore = 10 +
+                       deliveryFrames[currentFrameIndex - 2].CumulativeScore +
+                       deliveryFrames[currentFrameIndex].FirstDeliveryScore;
+                }
+                else
+                {
+                    //add  current deliveries 
+                } 
+            }
         }
     }
 }

@@ -28,6 +28,7 @@ namespace BowlingWebApplication.Services
             if (TestFirstDelivery())
             {
                 inputPlayerFrames[currentIndex].IsFirstDeliveryCompleted = true;
+                inputPlayerFrames[currentIndex].FirstDeliveryMark = "-";
                 inputPlayerFrames[currentIndex].FirstDeliveryScore = 0;
             }
         }
@@ -37,6 +38,7 @@ namespace BowlingWebApplication.Services
             if (TestSecondDelivery())
             {
                 inputPlayerFrames[currentIndex].IsSecondDeliveryCompleted = true;
+                inputPlayerFrames[currentIndex].SecondDeliveryMark = "-";
                 inputPlayerFrames[currentIndex].SecondDeliveryScore = 0;
             }
         }

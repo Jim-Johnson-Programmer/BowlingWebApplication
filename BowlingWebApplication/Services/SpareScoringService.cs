@@ -19,7 +19,7 @@ namespace BowlingWebApplication.Services
             if (TestForSpare())
             {
                 inputPlayerFrames[currentIndex].IsSecondDeliverySpare = true;
-                
+                inputPlayerFrames[currentIndex].SecondDeliveryMark = "/";
                 inputPlayerFrames[currentIndex].SecondDeliveryScore =
                     10 - inputPlayerFrames[currentIndex].FirstDeliveryScore;
             }

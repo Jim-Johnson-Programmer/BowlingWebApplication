@@ -40,12 +40,11 @@ namespace BowlingWebApplication.Controllers
 
         public IActionResult BowlingGame()
         {
-            //BowlingGameViewModel viewModel = new BowlingGameViewModel();
+            FullGameInfo fullGameInfo = GameDataFactory.RegisterPlayersIntoGame();
+            _frameScoringService.AllPlayersBowlNextFrame(fullGameInfo.GamePlayers);
+            //BowlingGameViewModel viewModel = new BowlingGameViewModel(fullGameInfo);
 
-            FullGameInfo fullGameInfo = new FullGameInfo();
-            _frameScoringService.AllPlayersBowlAFrame(fullGameInfo.GameUserScores);
-
-            return View();
+            return View(fullGameInfo);
         }
     }
 }

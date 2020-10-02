@@ -7,6 +7,6 @@ namespace BowlingWebApplication.Models
 {
     public class FullGameInfo
     {
-        public List<UserGameInfo> GameUserScores { get; set; } = new List<UserGameInfo>();
+        public List<UserGameInfo> GamePlayers { get; set; } = new List<UserGameInfo>();
     }
 }

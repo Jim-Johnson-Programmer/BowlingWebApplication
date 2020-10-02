@@ -20,6 +20,7 @@ namespace BowlingWebApplication.Services
             {
                 inputPlayerFrames[currentIndex].IsFirstDeliveryStrike = true;
                 inputPlayerFrames[currentIndex].FirstDeliveryScore = 10;
+                inputPlayerFrames[currentIndex].FirstDeliveryMark = "X";
                 inputPlayerFrames[currentIndex].IsFirstDeliveryCompleted = true;
             }
         }
