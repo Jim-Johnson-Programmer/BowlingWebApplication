@@ -1,8 +1,12 @@
-﻿namespace BowlingWebApplication.Services
+﻿using System.Collections.Generic;
+using BowlingWebApplication.Models;
+
+namespace BowlingWebApplication.Services
 {
     public interface ISpareScoringService
     {
         int AvgPercentOfTimeTrue { get; set; }
-        bool TestForSpare();
+        //bool TestForSpare();
+        void ScoreSecondDeliverySpare(List<PlayerFrame> inputPlayerFrames, int currentIndex);
     }
 }

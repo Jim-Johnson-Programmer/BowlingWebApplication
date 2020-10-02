@@ -27,7 +27,7 @@ namespace BowlingWebApplication.Services
         {
             if (TestFirstDelivery())
             {
-                inputPlayerFrames[currentIndex].FirstDeliveryCompleted = true;
+                inputPlayerFrames[currentIndex].IsFirstDeliveryCompleted = true;
                 inputPlayerFrames[currentIndex].FirstDeliveryScore = 0;
             }
         }

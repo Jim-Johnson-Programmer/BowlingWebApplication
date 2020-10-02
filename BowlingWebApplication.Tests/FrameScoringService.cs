@@ -3,7 +3,7 @@ using Xunit;
 
 namespace BowlingWebApplication.Tests
 {
-    public class UnitTest1
+    public class FrameScoringService
     {
         [Fact]
         public void Test1()

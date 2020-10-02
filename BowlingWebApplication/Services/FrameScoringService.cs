@@ -31,13 +31,13 @@ namespace BowlingWebApplication.Services
             foreach (UserGameInfo userGameInfo in allUsersGameInfo)
             { 
                 FirstDelivery(userGameInfo);
-                //SecondDelivery(userGameInfo);
+                SecondDelivery(userGameInfo);
  
-                SetupFrameDeliveryMarks(userGameInfo.DeliveryFrames,
-                    userGameInfo.CurrentProcessingFrameIndex);
+                //SetupFrameDeliveryMarks(userGameInfo.DeliveryFrames,
+                //    userGameInfo.CurrentProcessingFrameIndex);
 
-                ScoreFrameTotal(userGameInfo.DeliveryFrames,
-                    userGameInfo.CurrentProcessingFrameIndex);
+                //ScoreFrameTotal(userGameInfo.DeliveryFrames,
+                //    userGameInfo.CurrentProcessingFrameIndex);
                 
                 userGameInfo.CurrentProcessingFrameIndex++;
             }
@@ -57,13 +57,18 @@ namespace BowlingWebApplication.Services
 
             _partialKnockDownPinsService.CheckAndScoreFirstDelivery(inputUserGameInfo.DeliveryFrames,
                 inputUserGameInfo.CurrentProcessingFrameIndex);
-
         }
 
         public void SecondDelivery(UserGameInfo inputUserGameInfo)
         {
-            //second can be strike, spare, foul, all pins missed
+            _foulService.CheckAndScoreSecondDelivery(inputUserGameInfo.DeliveryFrames,
+                inputUserGameInfo.CurrentProcessingFrameIndex);
 
+            _allPinsMissedService.CheckAndScoreSecondDelivery(inputUserGameInfo.DeliveryFrames,
+                inputUserGameInfo.CurrentProcessingFrameIndex);
+
+            _spareService.ScoreSecondDeliverySpare(inputUserGameInfo.DeliveryFrames,
+                inputUserGameInfo.CurrentProcessingFrameIndex);
         }
 
         public void FirstExtraDelivery()

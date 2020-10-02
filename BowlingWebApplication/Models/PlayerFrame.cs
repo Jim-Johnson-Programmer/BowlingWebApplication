@@ -8,7 +8,7 @@ namespace BowlingWebApplication.Models
         public bool IsFirstDeliveryStrike { get; set; } 
         public bool IsSecondDeliverySpare { get; set; }
         public bool IsFirstDeliverySplit { get; set; }
-        public bool FirstDeliveryCompleted { get; set; } 
+        public bool IsFirstDeliveryCompleted { get; set; } 
         public int FirstDeliveryScore { get; set; }
         public bool IsFoulFirstDelivery { get; set; } 
         public string FirstDeliveryMark { get; set; } = string.Empty;
