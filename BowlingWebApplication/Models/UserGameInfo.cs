@@ -14,17 +14,15 @@ namespace BowlingWebApplication.Models
             {
                 DeliveryFrames.Add(new PlayerFrame(){FrameId = i});
             }
-            TenthFrameExtraFrames = new List<PlayerFrame>(2);
-            TenthFrameExtraFrames.Add(new PlayerFrame(){FrameId = 1});
-            TenthFrameExtraFrames.Add(new PlayerFrame() { FrameId = 2 });
         }
 
         public string FirstName { get; set; } 
         public string LastName { get; set; } 
         public int CurrentProcessingFrameIndex { get; set; }
-        public bool IsExtraFramesQualified { get; set; }
+        //public bool IsExtraFramesQualified { get; set; }
         public List<PlayerFrame> DeliveryFrames { get; set; } 
-        public List<PlayerFrame> TenthFrameExtraFrames { get; set; } 
+        //public List<PlayerFrame> TenthFrameExtraFrames { get; set; }
+        public string CurrentStatus { get; set; }
         public int PlayerFinalScore { get; set; }
         public bool IsWinner { get; set; }
     }

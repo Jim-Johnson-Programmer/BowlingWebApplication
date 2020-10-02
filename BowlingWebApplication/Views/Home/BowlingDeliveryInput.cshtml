@@ -1,0 +1,18 @@
+﻿@model BowlingWebApplication.Models.ViewModel.DeliveryInputViewModel
+
+<html>
+<head></head>
+<body>
+<form class="m-1 p-1" asp-action="BowlingDeliveryInput" method="post">
+    <div class="form-group">
+        <label asp-for="SelectedDeliveryType">Type of Delivery</label>
+        <select asp-for="SelectedDeliveryType" asp-items="@Model.DeliveryTypes">
+            <option> - Select -</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit"/>
+    </div>
+</form>
+</body>
+</html>

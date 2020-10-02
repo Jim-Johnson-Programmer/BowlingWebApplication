@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BowlingWebApplication.Models;
 using BowlingWebApplication.Models.ViewModel;
 using BowlingWebApplication.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BowlingWebApplication.Controllers
 {
@@ -45,6 +48,22 @@ namespace BowlingWebApplication.Controllers
             //BowlingGameViewModel viewModel = new BowlingGameViewModel(fullGameInfo);
 
             return View(fullGameInfo);
+        }
+
+        public IActionResult BowlingDeliveryInput()
+        {
+            DeliveryInputViewModel viewModel = new DeliveryInputViewModel();
+            viewModel.DeliveryTypes = new List<SelectListItem>()
+            {
+                new SelectListItem(){Text = "Strike", Value = "Strike"},
+                new SelectListItem(){Text = "Spare", Value = "Strike"},
+                new SelectListItem(){Text = "Split", Value = "Strike"},
+                new SelectListItem(){Text = "Open", Value = "Open"},
+                new SelectListItem(){Text = "Foul", Value = "Foul"}
+            };
+
+
+            return View(viewModel);
         }
     }
 }

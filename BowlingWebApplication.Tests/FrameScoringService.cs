@@ -54,7 +54,7 @@ namespace BowlingWebApplication.Tests
         {
             IFrameScoringService frameScoringService = CreateService();
             FullGameInfo fullGameInfo = GenerateData();
-            fullGameInfo.GamePlayers[0].DeliveryFrames
+            //fullGameInfo.GamePlayers[0].DeliveryFrames
 
         }
     }
