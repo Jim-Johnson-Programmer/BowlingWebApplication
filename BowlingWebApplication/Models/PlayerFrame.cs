@@ -14,7 +14,7 @@ namespace BowlingWebApplication.Models
         public string FirstDeliveryMark { get; set; } = string.Empty;
         public bool IsSecondDeliveryCompleted { get; set; } = false;
         public int SecondDeliveryScore { get; set; }
-        public bool IsFoulSecondDelivery { get; set; }
+        public bool IsSecondDeliveryFoul { get; set; }
         public string SecondDeliveryMark { get; set; } = string.Empty;
         public bool IsTenthFrameThirdDeliveryEligible { get; set; }
         public int CumulativeScore { get; set; }

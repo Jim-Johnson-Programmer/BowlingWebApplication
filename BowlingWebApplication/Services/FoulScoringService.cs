@@ -31,7 +31,7 @@ namespace BowlingWebApplication.Services
         {
             if (TestForFoul())
             {
-                inputPlayerFrames[currentIndex].IsFoulSecondDelivery = true;
+                inputPlayerFrames[currentIndex].IsSecondDeliveryFoul = true;
                 inputPlayerFrames[currentIndex].SecondDeliveryScore = 0;
                 inputPlayerFrames[currentIndex].SecondDeliveryMark = "F";
                 inputPlayerFrames[currentIndex].IsSecondDeliveryCompleted = true;
