@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using BowlingWebApplication.Models;
 
-namespace BowlingWebApplication.Services
+namespace BowlingWebApplication.Services.Interfaces
 {
-    public interface IAllPinsMissedService
+    public interface IFoulScoringService
     {
-        int FirstDeliveryAverage { get; set; }
-        int SecondDeliveryAverage { get; set; }
+        int AvgPercentOfTimeTrue { get; set; }
         void CheckAndScoreFirstDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex);
         void CheckAndScoreSecondDelivery(List<PlayerFrame> inputPlayerFrames, int currentIndex);
     }

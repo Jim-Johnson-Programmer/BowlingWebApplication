@@ -10,6 +10,10 @@ namespace BowlingWebApplication.Models.ViewModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public int FrameCount { get; set; }
+        public int DeliveryCount { get; set; }
+        public List<SelectListItem> Players { get; set; }
+        public string SelectedPlayerId { get; set; }
         public List<SelectListItem> DeliveryTypes { get; set; }
         public string SelectedDeliveryType { get; set; }
         public List<SelectListItem> CountOfPinsAvailable { get; set; }

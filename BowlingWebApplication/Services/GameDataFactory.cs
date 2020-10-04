@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BowlingWebApplication.Models;
+using BowlingWebApplication.Models.ViewModel;
 
 namespace BowlingWebApplication.Services
 {
     public class GameDataFactory
     {
-        public static FullGameInfo RegisterPlayersIntoGame()
+        public static FullGameModel RegisterPlayersIntoGame()
         {
-            FullGameInfo fullGameInfo = new FullGameInfo();
+            FullGameModel fullGameInfo = new FullGameModel();
 
             UserGameInfo user1 = new UserGameInfo();
             user1.FirstName = "FirstName1";

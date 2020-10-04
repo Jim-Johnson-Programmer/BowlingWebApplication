@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReadMe", "ReadMe", "{8D506C
 		ReadMe.txt = ReadMe.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BowlingWebApplication.Data", "BowlingWebApplication.Data\BowlingWebApplication.Data.csproj", "{3F036566-77A4-4709-9A08-872BA3661E3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{AF84D4F8-9FDF-42D9-AD10-C00E86C7E7D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF84D4F8-9FDF-42D9-AD10-C00E86C7E7D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF84D4F8-9FDF-42D9-AD10-C00E86C7E7D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F036566-77A4-4709-9A08-872BA3661E3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F036566-77A4-4709-9A08-872BA3661E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F036566-77A4-4709-9A08-872BA3661E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F036566-77A4-4709-9A08-872BA3661E3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

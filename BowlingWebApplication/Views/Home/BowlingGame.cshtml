@@ -1,6 +1,5 @@
-﻿@model BowlingWebApplication.Models.FullGameInfo
-@{
-}
+﻿@model BowlingWebApplication.Models.ViewModel.FullGameModel
+
 <html>
 <head>
     <style>
@@ -30,6 +29,7 @@
             width: auto;
             font-weight: bold;
             padding-right: 1em;
+            height: 2em;
         }
 
         .player-second-turn-score-box {
@@ -37,6 +37,7 @@
             border-bottom-style: solid;
             font-weight: bold;
             width: 2em;
+            height: 2em;
         }
 
         .player-first-tenth-turn-score-box {
@@ -44,6 +45,7 @@
             border-bottom-style: solid;
             font-weight: bold;
             width: 3em;
+            height: 2em;
         }
 
         .player-second-tenth-turn-score-box {
@@ -51,6 +53,7 @@
             border-bottom-style: solid;
             font-weight: bold;
             width: 2em;
+            height: 2em;
         }
 
         .player-third-tenth-turn-score-box {
@@ -71,9 +74,9 @@
     </style>
 </head>
 <body>
-    <div class="row justify-content-center">
-        <h1 class="text-center">Bowling Game</h1>
-    </div>
+<div class="row justify-content-center">
+    <h1 class="text-center">Bowling Game</h1>
+</div>
 <div class="col-lg-12">
     <table>
         <thead>
@@ -104,8 +107,8 @@
                         <div class="d-flex flex-nowrap float-right player-turn-row">
                             @if (frameInfo.FrameId < 10)
                             {
-                                <div class="player-first-turn-score-box">@frameInfo.FirstDeliveryMark</div>    
-                                <div class="player-second-turn-score-box">@frameInfo.SecondDeliveryMark</div>
+                                    <div class="player-first-turn-score-box">@frameInfo.FirstDeliveryMark</div>
+                                    <div class="player-second-turn-score-box">@frameInfo.SecondDeliveryMark</div>
                             }
                             else
                             {
@@ -115,7 +118,13 @@
                             }
                         </div>
                         <div class="float-none cumuluative-scoring-box">
-                            <div class="font-weight-bold">@frameInfo.CumulativeScore.ToString()</div>
+                            @*<div class="font-weight-bold">@frameInfo.CumulativeScore.ToString()</div>*@
+                            @if (!frameInfo.IsFirstDeliveryCompleted &&
+                                !frameInfo.IsSecondDeliveryCompleted &&
+                                frameInfo.FrameId == Model.CurrentFrameId)
+                            {
+                                <div><a href="#">Roll ball</a></div>
+                            }
                         </div>
                     </td>
                 }

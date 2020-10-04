@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BowlingWebApplication.Models;
+using BowlingWebApplication.Services.Interfaces;
 
 namespace BowlingWebApplication.Services
 {

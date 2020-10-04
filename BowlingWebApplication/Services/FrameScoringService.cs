@@ -3,6 +3,8 @@ using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Threading.Tasks;
 using BowlingWebApplication.Models;
+using BowlingWebApplication.Models.ReferenceMessages;
+using BowlingWebApplication.Services.Interfaces;
 
 namespace BowlingWebApplication.Services
 {
@@ -27,19 +29,50 @@ namespace BowlingWebApplication.Services
             _partialKnockDownPinsService = partialKnockDownPinsService;
         }
 
-        public void AllPlayersBowlNextFrame(List<UserGameInfo> allUsersGameInfo)
+        public void SetPlayerDeliveryInfo(int userId, int frameNum, int deliveryNum, int pinsKnockedDown, 
+            string delieveryStatus, List<UserGameInfo> allGameInfos)
         {
-            foreach (UserGameInfo userGameInfo in allUsersGameInfo)
-            { 
-                FirstDelivery(userGameInfo.DeliveryFrames, userGameInfo.CurrentProcessingFrameIndex);
+            
 
-                if(!userGameInfo.DeliveryFrames[userGameInfo.CurrentProcessingFrameIndex]
-                    .IsFirstDeliveryStrike)
-                    SecondDelivery(userGameInfo.DeliveryFrames, userGameInfo.CurrentProcessingFrameIndex);
+            if (delieveryStatus.Equals(UserDeliveryMessages.STRIKE_DELIVERY_STATUS))
+            {
+                _strikeService.CheckAndScoreFirstDelivery(allGameInfos[userId].DeliveryFrames, frameNum);
+            }
+            else if (delieveryStatus.Equals(UserDeliveryMessages.SPARE_DELIVERY_STATUS))
+            {
+                
+            }
+            else if (delieveryStatus.Equals(UserDeliveryMessages.OPEN_DELIVERY_STATUS))
+            {
 
-                userGameInfo.CurrentProcessingFrameIndex++;
+            }
+            else if (delieveryStatus.Equals(UserDeliveryMessages.FOUL_DELIVERY_STATUS))
+            {
+
+            }
+            else if (delieveryStatus.Equals(UserDeliveryMessages.OPEN_DELIVERY_STATUS))
+            {
+
+            }
+            else
+            {
+                //error messages
             }
         }
+
+        //public void AllPlayersBowlNextFrame(List<UserGameInfo> allUsersGameInfo)
+        //{
+        //    foreach (UserGameInfo userGameInfo in allUsersGameInfo)
+        //    { 
+        //        FirstDelivery(userGameInfo.DeliveryFrames, userGameInfo.CurrentProcessingFrameIndex);
+
+        //        if(!userGameInfo.DeliveryFrames[userGameInfo.CurrentProcessingFrameIndex]
+        //            .IsFirstDeliveryStrike)
+        //            SecondDelivery(userGameInfo.DeliveryFrames, userGameInfo.CurrentProcessingFrameIndex);
+
+        //        userGameInfo.CurrentProcessingFrameIndex++;
+        //    }
+        //}
 
         private void FirstDelivery(List<PlayerFrame> deliveryFrames, int currentFrameIndex)
         {

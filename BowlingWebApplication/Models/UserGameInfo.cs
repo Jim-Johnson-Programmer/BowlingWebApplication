@@ -16,12 +16,11 @@ namespace BowlingWebApplication.Models
             }
         }
 
-        public string FirstName { get; set; } 
-        public string LastName { get; set; } 
+        public int UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public int CurrentProcessingFrameIndex { get; set; }
-        //public bool IsExtraFramesQualified { get; set; }
-        public List<PlayerFrame> DeliveryFrames { get; set; } 
-        //public List<PlayerFrame> TenthFrameExtraFrames { get; set; }
+        public List<PlayerFrame> DeliveryFrames { get; set; }
         public string CurrentStatus { get; set; }
         public int PlayerFinalScore { get; set; }
         public bool IsWinner { get; set; }
