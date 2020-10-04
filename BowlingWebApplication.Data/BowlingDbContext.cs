@@ -12,7 +12,9 @@ namespace BowlingWebApplication.Data
         public DbSet<Frame> Frames { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
         public DbSet<FrameStatus> FrameStatuses { get; set; }
+        public DbSet<GamePlayer> GamePlayers { get; set; }
         public DbSet<Player> Players { get; set; }
+
 
         public BowlingDbContext() 
         {
