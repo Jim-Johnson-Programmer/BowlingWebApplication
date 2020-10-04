@@ -5,37 +5,32 @@ using System.Threading.Tasks;
 using BowlingWebApplication.Models;
 using BowlingWebApplication.Models.ViewModel;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 
 namespace BowlingWebApplication.Services
 {
     public class UserService : IUserService
     {
-        public void CreateUser(FullGameModel fullGameModel, BowlingUserViewModel userViewModel)
+        public void CreateUser(ScoreCardViewModel viewModel, BowlingUserViewModel userViewModel)
         {
-            if (!fullGameModel.GamePlayers.Any(o => o.FirstName.Equals(userViewModel.FirstName) &&
-                                                    o.LastName.Equals(userViewModel.LastName)))
-            {
-                fullGameModel.GamePlayers.Add(new UserGameInfo()
-                {
-                    FirstName = userViewModel.FirstName,
-                    LastName = userViewModel.LastName,
-                    UserId = fullGameModel.GamePlayers.Count != 0 ? fullGameModel.GamePlayers.Max(o => o.UserId) + 1 : 1,
-                    DeliveryFrames = CreatePlayerFrames(),
-                    CurrentStatus = "New Player"
-                });
-            }
+            viewModel.ScoreCardRows.Add(new ScoreCardRow(){FirstName = userViewModel.FirstName, 
+                LastName = userViewModel.LastName, PlayerId = viewModel.ScoreCardRows.Count + 1
+            });
+
+            if (viewModel.CurrentFrameId == 0) viewModel.CurrentFrameId = 1;
 
         }
-        private List<PlayerFrame> CreatePlayerFrames()
+
+        public List<SelectListItem> GetUserSelectListItems(ScoreCardViewModel viewModel)
         {
-            List<PlayerFrame> playerFrames = new List<PlayerFrame>();
-            for (int ctr = 1; ctr < 11; ctr++)
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (var scoreCardRow in viewModel.ScoreCardRows)
             {
-                playerFrames.Add(new PlayerFrame() { FrameId = ctr }); ;
+                selectListItems.Add(new SelectListItem(){Text = scoreCardRow.FirstName + " " + scoreCardRow.LastName, Value = scoreCardRow.PlayerId.ToString()});
             }
 
-            return playerFrames;
+            return selectListItems;
         }
     }
 

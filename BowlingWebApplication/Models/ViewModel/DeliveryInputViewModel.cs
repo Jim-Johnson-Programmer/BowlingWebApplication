@@ -18,7 +18,8 @@ namespace BowlingWebApplication.Models.ViewModel
         public string SelectedDeliveryType { get; set; }
         public List<SelectListItem> CountOfPinsAvailable { get; set; }
         public int SelectedPinCount { get; set; }
-        public string PreviousDeliveryCount { get; set; }
-        public string PreviousDeliveryType { get; set; }
+        public int PreviousDeliveryCount { get; set; }
+        public string PreviousDeliveryTypeText { get; set; }
+        public int PreviousDeliveryTypeCode { get; set; }
     }
 }

@@ -24,19 +24,23 @@ namespace BowlingWebApplication.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IFrameScoringService _frameScoringService;
         private readonly IUserService _userService;
+        private readonly IDeliveryService _deliveryService;
 
         public HomeController(ILogger<HomeController> logger, 
             IFrameScoringService frameScoringService,
-            IUserService userService)
+            IUserService userService,
+            IDeliveryService deliveryService)
         {
             _logger = logger;
             _frameScoringService = frameScoringService;
-            _userService = userService;}
+            _userService = userService;
+            _deliveryService = deliveryService;
+        }
 
         public IActionResult Index()
         {
-            FullGameModel fullGameModel = new FullGameModel();
-            HttpContext.Session.SetString("GameFullData", JsonConvert.SerializeObject(fullGameModel));
+            ScoreCardViewModel scoreCardViewModel = new ScoreCardViewModel();
+            HttpContext.Session.SetString("GameFullData", JsonConvert.SerializeObject(scoreCardViewModel));
 
             return View();
         }
@@ -57,44 +61,37 @@ namespace BowlingWebApplication.Controllers
         [HttpGet]
         public IActionResult BowlingGame()
         {
-            FullGameModel fullGameModel = JsonConvert.DeserializeObject<FullGameModel>(HttpContext.Session.GetString("GameFullData"));
+            ScoreCardViewModel scoreCardViewModel = JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
             //ScoreCardViewModel viewModel = new ScoreCardViewModel();
 
-            return View(fullGameModel);
+            return View(scoreCardViewModel);
         }
 
 
         [HttpGet]
-        public IActionResult BowlingDeliveryInput()
+        public IActionResult BowlingDeliveryInput(int playerId, int currFrameId, int currDeliveryId, int prevDeliveryType, int prevPinsDown)
         {
-            FullGameModel fullGameModel = JsonConvert.DeserializeObject<FullGameModel>(HttpContext.Session.GetString("GameFullData"));
+            ScoreCardViewModel scoreCardViewModel = JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
 
             DeliveryInputViewModel viewModel = new DeliveryInputViewModel();
             viewModel.DeliveryTypes = new List<SelectListItem>()
             {
-                new SelectListItem(){Text = "Strike", Value = "Strike"},
-                new SelectListItem(){Text = "Spare", Value = "Strike"},
-                new SelectListItem(){Text = "Split", Value = "Strike"},
-                new SelectListItem(){Text = "Open", Value = "Open"},
-                new SelectListItem(){Text = "Foul", Value = "Foul"}
+                new SelectListItem(){Text = "Strike", Value = ((int)FrameStatusEnum.Strike).ToString()},
+                new SelectListItem(){Text = "Spare", Value = ((int)FrameStatusEnum.Spare).ToString()},
+                new SelectListItem(){Text = "Split", Value = ((int)FrameStatusEnum.Split).ToString()},
+                new SelectListItem(){Text = "Missed Pins", Value = ((int)FrameStatusEnum.OpenFrame).ToString()},
+                new SelectListItem(){Text = "Foul", Value = ((int)FrameStatusEnum.Foul).ToString()}
             };
-            viewModel.CountOfPinsAvailable = new List<SelectListItem>()
-            {
-                new SelectListItem(){Text = "1", Value = "1"},
-                new SelectListItem(){Text = "2", Value = "2"},
-                new SelectListItem(){Text = "3", Value = "3"},
-                new SelectListItem(){Text = "4", Value = "4"},
-                new SelectListItem(){Text = "5", Value = "5"},
-                new SelectListItem(){Text = "6", Value = "6"},
-                new SelectListItem(){Text = "7", Value = "7"},
-                new SelectListItem(){Text = "8", Value = "8"},
-                new SelectListItem(){Text = "9", Value = "9"},
-                new SelectListItem(){Text = "10", Value = "10"},
-            };
-            viewModel.Players = fullGameModel.GamePlayers.Select(
-                    o => new SelectListItem() {Text = o.FirstName + " " + o.LastName, 
-                        Value = o.UserId.ToString()}).ToList();
+            viewModel.CountOfPinsAvailable = new List<SelectListItem>();
 
+            for (int i = 1; i <= 10-prevPinsDown; i++)
+            {
+                viewModel.CountOfPinsAvailable.Add(new SelectListItem(){Text = i.ToString(), Value = i.ToString()});
+            }
+
+            viewModel.PreviousDeliveryCount = prevPinsDown;
+            viewModel.PreviousDeliveryTypeText = _deliveryService.GetDeliveryStatusText(prevDeliveryType);
+            viewModel.Players = _userService.GetUserSelectListItems(scoreCardViewModel);
 
             return View(viewModel);
         }
@@ -103,10 +100,10 @@ namespace BowlingWebApplication.Controllers
         public IActionResult BowlingDeliveryInput(DeliveryInputViewModel inputViewModel)
         {
             //using session state in place of database for small demo and persistence between pages.
-            FullGameModel fullGameModel = JsonConvert.DeserializeObject<FullGameModel>(HttpContext.Session.GetString("GameFullData"));
+            ScoreCardViewModel viewModel = JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
 
 
-            HttpContext.Session.SetString("GameFullData", JsonConvert.SerializeObject(fullGameModel));
+            HttpContext.Session.SetString("GameFullData", JsonConvert.SerializeObject(viewModel));
 
             return View(inputViewModel);
         }
@@ -127,12 +124,12 @@ namespace BowlingWebApplication.Controllers
                 return View();
             }
 
-            FullGameModel fullGameModel = JsonConvert.DeserializeObject<FullGameModel>(HttpContext.Session.GetString("GameFullData"));
+            ScoreCardViewModel scoreCardViewModel = JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
 
-            _userService.CreateUser(fullGameModel, userViewModel);            
+            _userService.CreateUser(scoreCardViewModel, userViewModel);            
 
-            HttpContext.Session.SetString("GameFullData", JsonConvert.SerializeObject(fullGameModel));
-            return View("BowlingGame", fullGameModel);
+            HttpContext.Session.SetString("GameFullData", JsonConvert.SerializeObject(scoreCardViewModel));
+            return View("BowlingGame", scoreCardViewModel);
         }
     }
 }

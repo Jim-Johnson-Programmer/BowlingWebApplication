@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BowlingWebApplication
 {
@@ -27,6 +28,7 @@ namespace BowlingWebApplication
                 options.IdleTimeout = TimeSpan.FromSeconds(3600);
             });
 
+            services.AddTransient<IDeliveryService, DeliveryService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAllPinsMissedService, AllPinsMissedService>();
             services.AddTransient<IPartialKnockDownPinsService, PartialKnockDownPinsService>();
@@ -35,6 +37,12 @@ namespace BowlingWebApplication
             services.AddTransient<ISpareScoringService, SpareScoringService>();
             services.AddTransient<IFrameScoringService, FrameScoringService>();
             services.AddControllersWithViews();
+
+            //services.AddMvc().AddRazorPagesOptions(options=>
+            //{
+            //    options.Conventions
+            //        .AddPageRoute("/Home/BowlingGame", "");
+            //}).SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

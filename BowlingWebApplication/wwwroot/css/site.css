@@ -1,6 +1,74 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+th {
+    text-align: center;
+    border-style: solid;
+    width: 50em;
+}
+
+.solid-margin {
+    border-style: solid;
+}
+
+.parent-scoring-element {
+    text-align: center;
+    border-style: solid;
+    width: 50em;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+.player-turn-row {
+    margin-left: 100%;
+}
+
+.player-first-turn-score-box {
+    width: auto;
+    font-weight: bold;
+    padding-right: 1em;
+    height: 2em;
+}
+
+.player-second-turn-score-box {
+    border-left-style: solid;
+    border-bottom-style: solid;
+    font-weight: bold;
+    width: 2em;
+    height: 2em;
+}
+
+.player-first-tenth-turn-score-box {
+    border-left-style: solid;
+    border-bottom-style: solid;
+    font-weight: bold;
+    width: 3em;
+    height: 2em;
+}
+
+.player-second-tenth-turn-score-box {
+    border-left-style: solid;
+    border-bottom-style: solid;
+    font-weight: bold;
+    width: 2em;
+    height: 2em;
+}
+
+.player-third-tenth-turn-score-box {
+    border-left-style: solid;
+    border-bottom-style: solid;
+    font-weight: bold;
+    width: 3em;
+}
+
+.cumuluative-scoring-box {
+    padding-top: 2.5em;
+}
+
+.player-name-box {
+    padding: 1em;
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;

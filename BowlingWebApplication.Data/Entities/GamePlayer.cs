@@ -16,6 +16,5 @@
         public int Frame9 { get; set; }
         public int Frame10 { get; set; }
         public int FinalTotal { get; set; }
-
     }
 }

@@ -8,9 +8,11 @@ namespace BowlingWebApplication.Models.ViewModel
 {
     public class FullGameModel
     {
-        public int CurrentFrameId { get; set; }
+        public int CurrentPlayerId { get; set; }
+        public int CurrentFrameId { get; set; } = 1;
         public int CurrentDeliveryId { get; set; }
-        public int CurrentUserId { get; set; }
+        public int PreviousPinsDown { get; set; }
+        public string PreviousDeliveryType { get; set; }
         public List<UserGameInfo> GamePlayers { get; set; } = new List<UserGameInfo>();
     }
 }
