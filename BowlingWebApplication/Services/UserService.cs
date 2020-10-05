@@ -14,12 +14,18 @@ namespace BowlingWebApplication.Services
     {
         public void CreateUser(ScoreCardViewModel viewModel, BowlingUserViewModel userViewModel)
         {
-            viewModel.ScoreCardRows.Add(new ScoreCardRow(){FirstName = userViewModel.FirstName, 
-                LastName = userViewModel.LastName, PlayerId = viewModel.ScoreCardRows.Count + 1
+            List<ScoreCardFrame> frames = new List<ScoreCardFrame>();
+            for (int i = 1; i <= 10; i++)
+            {
+                frames.Add(new ScoreCardFrame(){FrameId = i});
+            }
+
+            viewModel.ScoreCardRows.Add(new ScoreCardRow(){
+                FirstName = userViewModel.FirstName, 
+                LastName = userViewModel.LastName, 
+                PlayerId = viewModel.ScoreCardRows.Count + 1,
+                ScoreCardFrames = frames
             });
-
-            if (viewModel.CurrentFrameId == 0) viewModel.CurrentFrameId = 1;
-
         }
 
         public List<SelectListItem> GetUserSelectListItems(ScoreCardViewModel viewModel)

@@ -10,15 +10,15 @@ namespace BowlingWebApplication.Models.ViewModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int FrameCount { get; set; }
-        public int DeliveryCount { get; set; }
-        public List<SelectListItem> Players { get; set; }
-        public string SelectedPlayerId { get; set; }
+        public int FrameIndex { get; set; }
+        public int CurrDeliveryInFrameCount { get; set; }
+        public int CurrDeliveryInFrameIndex { get; set; }
+        public int PlayerId { get; set; }
         public List<SelectListItem> DeliveryTypes { get; set; }
-        public string SelectedDeliveryType { get; set; }
+        public int SelectedDeliveryCode { get; set; }
         public List<SelectListItem> CountOfPinsAvailable { get; set; }
-        public int SelectedPinCount { get; set; }
-        public int PreviousDeliveryCount { get; set; }
+        public int SelectedPinsDownCount { get; set; }
+        public int PreviousDeliveryPinsDown { get; set; }
         public string PreviousDeliveryTypeText { get; set; }
         public int PreviousDeliveryTypeCode { get; set; }
     }

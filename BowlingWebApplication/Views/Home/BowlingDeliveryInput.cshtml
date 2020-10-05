@@ -26,36 +26,42 @@
     </script>
 </head>
 <body>
-    <form class="m-1 p-1" asp-action="BowlingDeliveryInput" method="post">
-        <div class="form-group">
-            <label asp-for="PreviousDeliveryTypeText">Previous Delivery Type</label>
-            <label>@Model.PreviousDeliveryTypeText</label>
-        </div>
-        <div class="form-group">
-            <label asp-for="PreviousDeliveryCount">Previous Pins Knocked Down</label>
-            <label>@Model.PreviousDeliveryCount</label>
-        </div>
-        <div class="form-group">
-            <label asp-for="SelectedPlayerId">Players</label>
-            <select asp-for="SelectedPlayerId" asp-items="@Model.Players" id="playerDropdown">
-                <option> - Select -</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label asp-for="SelectedDeliveryType">Type of Delivery</label>
-            <select asp-for="SelectedDeliveryType" asp-items="@Model.DeliveryTypes">
-                <option> - Select -</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label asp-for="SelectedPinCount">Pins to Knock Down</label>
-            <select asp-for="SelectedPinCount" asp-items="@Model.CountOfPinsAvailable">
-                <option> - Select -</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <input type="submit" />
-        </div>
-    </form>
+<form class="m-1 p-1" asp-action="BowlingDeliveryInput" method="post">
+    <div class="form-group">
+        <label asp-for="CurrDeliveryInFrameCount">Delivery Count In This Frame</label>
+        <label>@Model.CurrDeliveryInFrameCount</label>
+        <input asp-for="CurrDeliveryInFrameCount" type="text" value="@Model.CurrDeliveryInFrameCount" style="display: none"/>
+        
+    </div>
+    <div class="form-group">
+        <label asp-for="PreviousDeliveryTypeText">Previous Delivery Type</label>
+        <label>@Model.PreviousDeliveryTypeText</label>
+        @Html.Hidden("CurrDeliveryInFrameIndex", @Model.CurrDeliveryInFrameIndex)
+    </div>
+    <div class="form-group">
+        <label asp-for="PreviousDeliveryPinsDown">Previous Pins Knocked Down</label>
+        <label>@Model.PreviousDeliveryPinsDown</label>
+        @Html.Hidden("PreviousDeliveryPinsDown", @Model.PreviousDeliveryPinsDown)
+    </div>
+    <div class="form-group">
+        <label>Current Player</label>
+        <label>@Model.FirstName @Model.LastName</label>
+    </div>
+    <div class="form-group">
+        <label asp-for="SelectedDeliveryCode">Type of Delivery</label>
+        <select asp-for="SelectedDeliveryCode" asp-items="@Model.DeliveryTypes">
+            <option> - Select -</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="SelectedPinsDownCount">Pins to Knock Down</label>
+        <select asp-for="SelectedPinsDownCount" asp-items="@Model.CountOfPinsAvailable">
+            <option> - Select -</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit"/>
+    </div>
+</form>
 </body>
 </html>
