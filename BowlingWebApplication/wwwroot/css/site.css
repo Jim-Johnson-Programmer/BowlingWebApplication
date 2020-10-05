@@ -16,7 +16,6 @@ th {
     border-style: solid;
     width: 50em;
     padding: 0;
-    vertical-align: baseline;
 }
 
 .player-turn-row {
@@ -42,7 +41,7 @@ th {
     border-left-style: solid;
     border-bottom-style: solid;
     font-weight: bold;
-    width: 3em;
+    width: 2em;
     height: 2em;
 }
 
@@ -58,7 +57,7 @@ th {
     border-left-style: solid;
     border-bottom-style: solid;
     font-weight: bold;
-    width: 3em;
+    width: 2em;
 }
 
 .cumuluative-scoring-box {

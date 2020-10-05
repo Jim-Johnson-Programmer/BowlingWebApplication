@@ -28,132 +28,147 @@ namespace BowlingWebApplication.Services
         {
             if (deliveryInputViewModel.CurrDeliveryInFrameCount == 1)
             {
-                ScoreFirstDelivery(scoreCardViewModel, deliveryInputViewModel);
+                MarkFirstDelivery(scoreCardViewModel, deliveryInputViewModel);
             }
             else if (deliveryInputViewModel.CurrDeliveryInFrameCount == 2)
             {
-                
+                MarkSecondDelivery(scoreCardViewModel, deliveryInputViewModel);
+            }
+            else
+            {
+                ScoreRegularFrames(scoreCardViewModel, deliveryInputViewModel);
             }
             //conditions for 10th frame calculations
-            
+
             scoreCardViewModel.PreviousPinDownCount = deliveryInputViewModel.SelectedPinsDownCount;
             scoreCardViewModel.PreviousDeliveryType = deliveryInputViewModel.SelectedDeliveryCode;
 
-            scoreCardViewModel.CurrentDeliveryInFrameCount++;
-
             //save selected info into past info
+            if (scoreCardViewModel.CurrentFrameId < 10 &&
+                deliveryInputViewModel.CurrDeliveryInFrameCount==2)
+            {
+                scoreCardViewModel.PreviousPinDownCount = 0;
+                scoreCardViewModel.PreviousDeliveryType = 0;
+                scoreCardViewModel.CurrentFrameId++;
+            }
+
+            scoreCardViewModel.CurrentDeliveryInFrameCount = deliveryInputViewModel.CurrDeliveryInFrameCount == 2 
+                ? 0 : deliveryInputViewModel.CurrDeliveryInFrameCount;
         }
 
-        private void ScoreFirstDelivery(ScoreCardViewModel scoreCardViewModel, DeliveryInputViewModel deliveryInputViewModel)
+        private void MarkFirstDelivery(ScoreCardViewModel scoreCardViewModel, DeliveryInputViewModel deliveryInputViewModel)
         {
             if (deliveryInputViewModel.SelectedDeliveryCode == (int) FrameStatusEnum.OpenFrame)
             {
                 //score as zero and move on
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FirstDeliveryMark = 
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                    .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].FirstDeliveryMark = 
                     UserDeliveryMessages.OPEN_FRAME_DELIVERY_CODE;
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FirstDeliveryScore = 0;
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                    .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].FirstDeliveryScore = 0;
             }
             else if (deliveryInputViewModel.SelectedDeliveryCode == (int) FrameStatusEnum.Foul)
             {
                 //save the zero and mark as f
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FirstDeliveryScore = 0;
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                    .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].FirstDeliveryScore = 0;
 
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                        .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FirstDeliveryMark =
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                        .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].FirstDeliveryMark =
                     UserDeliveryMessages.FOUL_DELIVERY_CODE;
             }
             else if (deliveryInputViewModel.SelectedDeliveryCode == (int) FrameStatusEnum.Split)
             {
                 //simply save the score and prepend pins down with S
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                        .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FirstDeliveryMark =
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                        .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].FirstDeliveryMark =
                     UserDeliveryMessages.SPLIT_DELIVERY_CODE+deliveryInputViewModel.SelectedPinsDownCount;
 
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                        .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FirstDeliveryScore =
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                        .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].FirstDeliveryScore =
                                                         deliveryInputViewModel.SelectedPinsDownCount;
 
-                int firstRoundPinsTotal = scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex=1].FrameCumulativeScore;
+                //int firstRoundPinsTotal = scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
+                //    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FrameCumulativeScore;
 
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FrameCumulativeScore = 
-                    firstRoundPinsTotal + deliveryInputViewModel.SelectedPinsDownCount;
+                //scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
+                //    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FrameCumulativeScore = 
+                //    firstRoundPinsTotal + deliveryInputViewModel.SelectedPinsDownCount;
             }
             else if (deliveryInputViewModel.SelectedDeliveryCode == (int) FrameStatusEnum.Strike)
             {
                 //skip if first time
 
                 //score the next time
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                        .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FirstDeliveryMark =
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                        .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].FirstDeliveryMark =
                     UserDeliveryMessages.STRIKE_DELIVERY_CODE;
 
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FirstDeliveryScore = 10;
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                    .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].FirstDeliveryScore = 10;
             }
         }
 
-        private void ScoreSecondDelivery(ScoreCardViewModel scoreCardViewModel, DeliveryInputViewModel deliveryInputViewModel)
+        private void MarkSecondDelivery(ScoreCardViewModel scoreCardViewModel, DeliveryInputViewModel deliveryInputViewModel)
         {
             if (deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.OpenFrame)
             {
-                //score as zero and move on
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].SecondDeliveryMark =
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                    .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].SecondDeliveryMark =
                     UserDeliveryMessages.OPEN_FRAME_DELIVERY_CODE;
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].SecondDeliveryScore = 0;
-
-                //scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                //    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex - 1].FrameCumulativeScore = 0;
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                    .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].SecondDeliveryScore = 0;
             }
             else if (deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.Foul)
             {
                 //save the zero and mark as f
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex - 1].FrameCumulativeScore = 0;
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                    .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].SecondDeliveryScore = 0;
 
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                        .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex - 1].FirstDeliveryMark =
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                        .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].SecondDeliveryMark =
                     UserDeliveryMessages.FOUL_DELIVERY_CODE;
-
-                //scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                //    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex - 1].FrameCumulativeScore = 0;
             }
             else if (deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.Spare)
             {
-                //skip if first time
-
                 //score the next time mark as / 
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                        .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FirstDeliveryMark =
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                        .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].SecondDeliveryMark=
                     UserDeliveryMessages.SPARE_DELIVERY_CODE;
 
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FirstDeliveryScore = 10;
+                int firstScore = scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                                .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].FirstDeliveryScore;
 
-                //scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                //    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex - 1].FrameCumulativeScore = 0;
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                    .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].SecondDeliveryScore = 10 - firstScore;
             }
             else if (deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.Split)
             {
                 //simply save the score and prepend pins down with S
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                        .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FirstDeliveryMark =
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                        .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].SecondDeliveryMark =
                     UserDeliveryMessages.SPLIT_DELIVERY_CODE + deliveryInputViewModel.SelectedPinsDownCount;
 
-                scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                        .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex].FirstDeliveryScore =
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                        .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].SecondDeliveryScore =
                                                         deliveryInputViewModel.SelectedPinsDownCount;
-
-                //scoreCardViewModel.ScoreCardRows[deliveryInputViewModel.FrameIndex]
-                //    .ScoreCardFrames[deliveryInputViewModel.CurrDeliveryInFrameIndex - 1].FrameCumulativeScore = 0;
             }
         }
-    }
 
+        private void ScoreRegularFrames(ScoreCardViewModel scoreCardViewModel, DeliveryInputViewModel deliveryInputViewModel)
+        {
+                //score as zero and move on
+                scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                        .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].FrameCumulativeScore
+                    =
+                    scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                        .ScoreCardFrames[scoreCardViewModel.CurrentFrameId - 1].FrameCumulativeScore
+                    +
+                    scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                        .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].FirstDeliveryScore
+                    +
+                    scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                        .ScoreCardFrames[scoreCardViewModel.CurrentFrameId].SecondDeliveryScore;
+        }
+    }
 }

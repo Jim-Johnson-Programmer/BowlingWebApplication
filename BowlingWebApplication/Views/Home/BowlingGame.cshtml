@@ -46,7 +46,7 @@
                     {
                         <td class="parent-scoring-element">
                             <div class="d-flex flex-nowrap float-right player-turn-row">
-                                @if (frameCounter < 10)
+                                @if (frameCounter < 9)
                                 {
                                     <div class="player-first-turn-score-box">@rowItem.ScoreCardFrames[frameCounter].FirstDeliveryMark</div>
                                     <div class="player-second-turn-score-box">@rowItem.ScoreCardFrames[frameCounter].SecondDeliveryMark</div>
@@ -54,14 +54,16 @@
                                 else
                                 {
                                     <div class="player-first-tenth-turn-score-box">zz</div>
+                                    <div class="player-second-tenth-turn-score-box">zz</div>
                                     <div class="player-third-tenth-turn-score-box">zz</div>
                                 }
                             </div>
                             <div class="float-none cumuluative-scoring-box">
-                                @*<div class="font-weight-bold">@frameInfo.CumulativeScore.ToString()</div>*@
                                 @if (frameCounter == Model.CurrentFrameId)
                                 {
-                                    <div><a href="~/Home/BowlingDeliveryInput?playerId=@rowItem.PlayerId&currFrameId=@(frameCounter - 1)&currDeliveryInFrameCt=@Model.CurrentDeliveryInFrameCount&prevDeliveryType=@Model.PreviousDeliveryType&prevPinsDown=@Model.PreviousPinDownCount">Roll ball</a></div>
+                                    <div class="font-weight-bold cumulative-cells-height">
+                                        <a href="~/Home/BowlingDeliveryInput?playerId=@rowItem.PlayerId&currRowIndex=@Model.CurrentScoreCardRowIndex&currFrameId=@frameCounter&currDeliveryInFrameCt=@Model.CurrentDeliveryInFrameCount&prevDeliveryType=@Model.PreviousDeliveryType&prevPinsDown=@Model.PreviousPinDownCount">Roll ball</a>
+                                    </div>
                                 }
                                 else
                                 {

@@ -19,7 +19,6 @@ namespace BowlingWebApplication.Models.ViewModel
         public int PreviousDeliveryType { get; set; }
         public int CurrentDeliveryType { get; set; }
         public int CurrentScoreCardRowIndex { get; set; }
-   
         public List<ScoreCardRow> ScoreCardRows { get; set; } = new List<ScoreCardRow>();
     }
 
@@ -42,12 +41,4 @@ namespace BowlingWebApplication.Models.ViewModel
         public int FrameCumulativeScore { get; set; }
         public int FrameId { get; set; }
     }
-
-    public class DeliveryItem
-    {
-        public int PinsDown { get; set; }
-        public int DeliveryTypeCode { get; set; }
-        public string DeliveryTypeText { get; set; }
-    }
-
 }
