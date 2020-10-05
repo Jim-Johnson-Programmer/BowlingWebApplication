@@ -72,13 +72,15 @@ namespace BowlingWebApplication.Controllers
         public IActionResult BowlingDeliveryInput(int playerId, int currRowIndex, int currFrameId, int currDeliveryInFrameCt, int prevDeliveryType, int prevPinsDown)
         {
             ScoreCardViewModel scoreCardViewModel = JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
+            scoreCardViewModel.CurrentFrameId = currFrameId;
 
             DeliveryInputViewModel deliveryInputViewModel = new DeliveryInputViewModel();
             deliveryInputViewModel.DeliveryTypes = new List<SelectListItem>()
             {
                 new SelectListItem(){Text = "Split", Value = ((int)FrameStatusEnum.Split).ToString()},
                 new SelectListItem(){Text = "Missed Pins", Value = ((int)FrameStatusEnum.OpenFrame).ToString()},
-                new SelectListItem(){Text = "Foul", Value = ((int)FrameStatusEnum.Foul).ToString()}
+                new SelectListItem(){Text = "Foul", Value = ((int)FrameStatusEnum.Foul).ToString()},
+                new SelectListItem(){Text = "Standard Roll", Value = ((int)FrameStatusEnum.StandardRoll).ToString()}
             };
 
             if (prevDeliveryType == 0)

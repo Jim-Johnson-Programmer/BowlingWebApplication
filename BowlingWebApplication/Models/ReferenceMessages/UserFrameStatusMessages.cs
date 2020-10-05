@@ -24,6 +24,7 @@ namespace BowlingWebApplication.Models.ReferenceMessages
             FrameStatusItem.Add((int)FrameStatusEnum.Spare, "Spare");
             FrameStatusItem.Add((int)FrameStatusEnum.Split, "Split");
             FrameStatusItem.Add((int)FrameStatusEnum.Strike, "Strike");
+            FrameStatusItem.Add((int)FrameStatusEnum.StandardRoll, "Standard Roll");
         }
 
         public Dictionary<int, string> FrameStatusItem { get; set; } = new Dictionary<int, string>();

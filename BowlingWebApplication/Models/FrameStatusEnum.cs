@@ -7,5 +7,6 @@
         OpenFrame=3,
         Split=4,
         Foul=5,
+        StandardRoll=6
     }
 }

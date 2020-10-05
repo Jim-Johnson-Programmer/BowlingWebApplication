@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace BowlingWebApplication.Models.ViewModel
 {
@@ -20,25 +17,5 @@ namespace BowlingWebApplication.Models.ViewModel
         public int CurrentDeliveryType { get; set; }
         public int CurrentScoreCardRowIndex { get; set; }
         public List<ScoreCardRow> ScoreCardRows { get; set; } = new List<ScoreCardRow>();
-    }
-
-    public class ScoreCardRow
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public int PlayerId { get; set; }
-        public int DeliveriesPerFrameCount { get; set; }
-        public int CurrentScoreCardFrameIndex { get; set; }
-        public List<ScoreCardFrame> ScoreCardFrames { get; set; }
-    }
-
-    public class ScoreCardFrame
-    {
-        public string FirstDeliveryMark { get; set; }
-        public int FirstDeliveryScore { get; set; }
-        public string SecondDeliveryMark { get; set; }
-        public int SecondDeliveryScore { get; set; }
-        public int FrameCumulativeScore { get; set; }
-        public int FrameId { get; set; }
     }
 }
