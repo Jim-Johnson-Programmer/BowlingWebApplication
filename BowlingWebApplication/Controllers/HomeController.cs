@@ -106,7 +106,7 @@ namespace BowlingWebApplication.Controllers
             if (currFrameId<10)
             {
                 deliveryInputViewModel.CurrDeliveryInFrameIndex = currDeliveryInFrameCt;
-                deliveryInputViewModel.CurrDeliveryInFrameCount = currDeliveryInFrameCt==0?1:2;
+                deliveryInputViewModel.CurrDeliveryInFrameCount = currDeliveryInFrameCt+1;
             }
             else
             {
@@ -117,18 +117,41 @@ namespace BowlingWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult BowlingDeliveryInput(DeliveryInputViewModel inputViewModel)
+        public IActionResult BowlingDeliveryInput(DeliveryInputViewModel deliveryInputViewModel)
         {
             //using session state in place of database for small demo and persistence between pages.
-            ScoreCardViewModel scoreCardviewModel = JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
+            ScoreCardViewModel scoreCardViewModel = JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
 
-            scoreCardviewModel.CurrentDeliveryInFrameCount = inputViewModel.CurrDeliveryInFrameIndex;
+            _deliveryService.SaveDelivery(scoreCardViewModel, deliveryInputViewModel);
 
-            _deliveryService.SaveDelivery(scoreCardviewModel, inputViewModel);
+            ////save selected info into past info
+            if (scoreCardViewModel.CurrentFrameId < 9 &&
+                (deliveryInputViewModel.CurrDeliveryInFrameCount == 2 ||
+                 deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.Strike))
+            {
+                scoreCardViewModel.PreviousPinDownCount = 0;
+                scoreCardViewModel.PreviousDeliveryType = 0;
+                scoreCardViewModel.CurrentDeliveryInFrameCount = 0;
+                scoreCardViewModel.CurrentFrameId++;
+            }
+            else if (scoreCardViewModel.CurrentFrameId < 9 &&
+                     deliveryInputViewModel.CurrDeliveryInFrameCount < 2)
+            {
+                scoreCardViewModel.PreviousPinDownCount = deliveryInputViewModel.SelectedPinsDownCount;
+                scoreCardViewModel.PreviousDeliveryType = deliveryInputViewModel.SelectedDeliveryCode;
+                scoreCardViewModel.CurrentDeliveryInFrameCount =
+                    deliveryInputViewModel.CurrDeliveryInFrameCount == 2
+                        ? 0
+                        : deliveryInputViewModel.CurrDeliveryInFrameCount;
+            }
+            else if(scoreCardViewModel.CurrentFrameId==9)
+            {
+                scoreCardViewModel.PreviousPinDownCount = deliveryInputViewModel.SelectedPinsDownCount;
+                scoreCardViewModel.PreviousDeliveryType = deliveryInputViewModel.SelectedDeliveryCode;
+                ++scoreCardViewModel.CurrentDeliveryInFrameCount;
+            }
 
-            //run scoring service
-
-            HttpContext.Session.SetString("GameFullData", JsonConvert.SerializeObject(scoreCardviewModel));
+            HttpContext.Session.SetString("GameFullData", JsonConvert.SerializeObject(scoreCardViewModel));
 
             return RedirectToAction("BowlingGame");
         }
