@@ -68,31 +68,43 @@ namespace BowlingWebApplication.Controllers
         [HttpGet]
         public IActionResult BowlingDeliveryInput(int playerId, int currRowIndex, int currFrameId, int currDeliveryInFrameCt, int prevDeliveryType, int prevPinsDown)
         {
-            ScoreCardViewModel scoreCardViewModel = JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
+            var deliveryInputViewModel = DeliveryInputViewModel(currRowIndex, currFrameId, currDeliveryInFrameCt, prevDeliveryType, prevPinsDown);
+
+            return View(deliveryInputViewModel);
+        }
+
+        private DeliveryInputViewModel DeliveryInputViewModel(int currRowIndex, int currFrameId, int currDeliveryInFrameCt,
+            int prevDeliveryType, int prevPinsDown)
+        {
+            ScoreCardViewModel scoreCardViewModel =
+                JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
             scoreCardViewModel.CurrentFrameId = currFrameId;
 
             DeliveryInputViewModel deliveryInputViewModel = new DeliveryInputViewModel();
             deliveryInputViewModel.DeliveryTypes = new List<SelectListItem>()
             {
-                new SelectListItem(){Text = "Split", Value = ((int)FrameStatusEnum.Split).ToString()},
-                new SelectListItem(){Text = "Missed Pins", Value = ((int)FrameStatusEnum.OpenFrame).ToString()},
-                new SelectListItem(){Text = "Foul", Value = ((int)FrameStatusEnum.Foul).ToString()},
-                new SelectListItem(){Text = "Standard Roll", Value = ((int)FrameStatusEnum.StandardRoll).ToString()}
+                new SelectListItem() {Text = "Split", Value = ((int) FrameStatusEnum.Split).ToString()},
+                new SelectListItem() {Text = "Missed Pins", Value = ((int) FrameStatusEnum.OpenFrame).ToString()},
+                new SelectListItem() {Text = "Foul", Value = ((int) FrameStatusEnum.Foul).ToString()},
+                new SelectListItem() {Text = "Standard Roll", Value = ((int) FrameStatusEnum.StandardRoll).ToString()}
             };
 
             if (prevDeliveryType == 0)
             {
-                deliveryInputViewModel.DeliveryTypes.Add(new SelectListItem() { Text = "Strike", Value = ((int)FrameStatusEnum.Strike).ToString() });
+                deliveryInputViewModel.DeliveryTypes.Add(new SelectListItem()
+                    {Text = "Strike", Value = ((int) FrameStatusEnum.Strike).ToString()});
             }
-            else if (prevDeliveryType!=0)
+            else if (prevDeliveryType != 0)
             {
-                deliveryInputViewModel.DeliveryTypes.Add(new SelectListItem() { Text = "Spare", Value = ((int)FrameStatusEnum.Spare).ToString() });
+                deliveryInputViewModel.DeliveryTypes.Add(new SelectListItem()
+                    {Text = "Spare", Value = ((int) FrameStatusEnum.Spare).ToString()});
             }
 
             deliveryInputViewModel.CountOfPinsAvailable = new List<SelectListItem>();
-            for (int i = 1; i <= 10-prevPinsDown; i++)
+            for (int i = 1; i <= 10 - prevPinsDown; i++)
             {
-                deliveryInputViewModel.CountOfPinsAvailable.Add(new SelectListItem(){Text = i.ToString(), Value = i.ToString()});
+                deliveryInputViewModel.CountOfPinsAvailable.Add(
+                    new SelectListItem() {Text = i.ToString(), Value = i.ToString()});
             }
 
             deliveryInputViewModel.PreviousDeliveryPinsDown = prevPinsDown;
@@ -100,17 +112,13 @@ namespace BowlingWebApplication.Controllers
             deliveryInputViewModel.FirstName = scoreCardViewModel.ScoreCardRows[currRowIndex].FirstName;
             deliveryInputViewModel.LastName = scoreCardViewModel.ScoreCardRows[currRowIndex].LastName;
 
-            if (currFrameId<10)
+            if (currFrameId < 10)
             {
                 deliveryInputViewModel.CurrDeliveryInFrameIndex = currDeliveryInFrameCt;
-                deliveryInputViewModel.CurrDeliveryInFrameCount = currDeliveryInFrameCt+1;
-            }
-            else
-            {
-                //10th frame stuff here 
+                deliveryInputViewModel.CurrDeliveryInFrameCount = currDeliveryInFrameCt + 1;
             }
 
-            return View(deliveryInputViewModel);
+            return deliveryInputViewModel;
         }
 
         [HttpPost]
@@ -118,6 +126,11 @@ namespace BowlingWebApplication.Controllers
         {
             //using session state in place of database for small demo and persistence between pages.
             ScoreCardViewModel scoreCardViewModel = JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
+            
+            if (!ModelState.IsValid)
+            {
+                return View(deliveryInputViewModel);
+            }
 
             _deliveryService.SaveDelivery(scoreCardViewModel, deliveryInputViewModel);
 

@@ -1,6 +1,7 @@
 ﻿$(document).ready(function (parameters) {
     $("#dpDnDeliveryCode").on('change', function () {
         let prevPinsDown = Number($("#prevPinsDown").val());
+        let availablePinsCt = 10 - prevPinsDown; 
         switch ($(this).val()) {
         case '1': //strike
             $('#dpDnPinsDown').prop('disabled', true);
@@ -10,12 +11,11 @@
             $("#dpDnPinsDown").val(10);
             break;
         case '2'://spare
-            $('#dpDnPinsDown').prop('disabled', false);
+            $('#dpDnPinsDown').prop('disabled', true);
             $('#dpDnPinsDown option').remove();
             $("#dpDnPinsDown").append($('<option></option>').val('').html('-select-'));
-            for (var i = 1; i <= 10 - prevPinsDown; i++) {
-                $("#dpDnPinsDown").append( $('<option></option>').val(i).html(i));
-            }
+            $("#dpDnPinsDown").append($('<option></option>').val(availablePinsCt).html(availablePinsCt));
+            $("#dpDnPinsDown").val(availablePinsCt);
             break;
         case '3': //open frame
             $('#dpDnPinsDown').prop('disabled', true);
@@ -43,7 +43,9 @@
             $('#dpDnPinsDown').prop('disabled', false);
             $('#dpDnPinsDown option').remove();
             $("#dpDnPinsDown").append($('<option></option>').val('').html('-select-'));
-            for (var i = 1; i <= 10; i++) {
+            let maxPins = 10;
+            if (prevPinsDown > 0) maxPins = 9;
+                for (var i = 1; i <= maxPins - prevPinsDown; i++) {
                 $("#dpDnPinsDown").append($('<option></option>').val(i).html(i));
             }
             break;

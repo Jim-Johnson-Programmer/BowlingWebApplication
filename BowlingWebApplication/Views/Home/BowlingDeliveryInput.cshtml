@@ -1,26 +1,33 @@
 ﻿@model BowlingWebApplication.Models.ViewModel.DeliveryInputViewModel
     <script src="~/js/BowlingDeliveryInput.js"></script>
 
+
 <form class="m-1 p-1" asp-action="BowlingDeliveryInput" method="post">
+    <input asp-for="FrameIndex" type="hidden" value="@Model.FrameIndex"/>
+    @*<input asp-for="FrameIndex" type="hidden" value="@Model."/>*@
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="CurrDeliveryInFrameCount">Delivery Number in this Frame</label>
-        <label>@Model.CurrDeliveryInFrameCount</label>
-        <input asp-for="CurrDeliveryInFrameCount" type="text" value="@Model.CurrDeliveryInFrameCount" style="display: none"/>
-        
+        <label id="currDeliveryInFrameCt">@Model.CurrDeliveryInFrameCount</label>
+        <input asp-for="CurrDeliveryInFrameCount" type="hidden" value="@Model.CurrDeliveryInFrameCount"/>
     </div>
     <div class="form-group">
         <label asp-for="PreviousDeliveryTypeText">Previous Delivery Type</label>
         <label>@Model.PreviousDeliveryTypeText</label>
-        @Html.Hidden("CurrDeliveryInFrameIndex", @Model.CurrDeliveryInFrameIndex)
+        @*@Html.Hidden("CurrDeliveryInFrameIndex", @Model.CurrDeliveryInFrameIndex)*@
+        <input asp-for="PreviousDeliveryTypeText" type="hidden" value="@Model.PreviousDeliveryTypeText"/>
     </div>
     <div class="form-group">
         <label asp-for="PreviousDeliveryPinsDown">Previous Pins Knocked Down</label>
-        <label id="prevPinsDown">@Model.PreviousDeliveryPinsDown</label>
-        @Html.Hidden("PreviousDeliveryPinsDown", @Model.PreviousDeliveryPinsDown)
+        <label>@Model.PreviousDeliveryPinsDown</label>
+        @*@Html.Hidden("PreviousDeliveryPinsDown", @Model.PreviousDeliveryPinsDown, new { @id = "prevPinsDown" })*@
+        <input id="prevPinsDown" asp-for="PreviousDeliveryTypeText" type="hidden" value="@Model.PreviousDeliveryTypeText"/>
     </div>
     <div class="form-group">
         <label>Current Player</label>
         <label>@Model.FirstName @Model.LastName</label>
+        <input asp-for="FirstName" type="hidden" value="@Model.FirstName"/>
+        <input asp-for="LastName" type="hidden" value="@Model.LastName"/>
     </div>
     <div class="form-group">
         <label asp-for="SelectedDeliveryCode">Type of Delivery</label>
@@ -30,7 +37,7 @@
     </div>
     <div class="form-group">
         <label asp-for="SelectedPinsDownCount">Pins to Knock Down</label>
-        <select id="dpDnPinsDown" asp-for="SelectedPinsDownCount" asp-items="@Model.CountOfPinsAvailable">
+        <select id="dpDnPinsDown" asp-for="SelectedPinsDownCount" asp-items="@Model.CountOfPinsAvailable" disabled="true">
             <option>-select-</option>
         </select>
     </div>

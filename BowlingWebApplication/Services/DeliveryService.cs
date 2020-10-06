@@ -27,6 +27,13 @@ namespace BowlingWebApplication.Services
                         .ScoreCardFrames[scoreCardViewModel.CurrentFrameId - 1]; 
             }
 
+            ScoreCardFrame twoFramesBackFrame = new ScoreCardFrame();
+            if (scoreCardViewModel.CurrentFrameId > 1)
+            {
+                twoFramesBackFrame = scoreCardViewModel.ScoreCardRows[scoreCardViewModel.CurrentScoreCardRowIndex]
+                    .ScoreCardFrames[scoreCardViewModel.CurrentFrameId - 2];
+            }
+
             if (deliveryInputViewModel.CurrDeliveryInFrameCount == 1)
             {
                 MarkFirstDelivery(currentFrame, deliveryInputViewModel);
@@ -34,7 +41,7 @@ namespace BowlingWebApplication.Services
             else if (deliveryInputViewModel.CurrDeliveryInFrameCount == 2)
             {
                 MarkSecondDelivery(currentFrame, deliveryInputViewModel);
-                ScorePrevFrameForStrikesAndSpares(previousFrame, currentFrame, deliveryInputViewModel);
+                ScorePrevFrameForStrikesAndSpares( twoFramesBackFrame, previousFrame, currentFrame, deliveryInputViewModel);
                 if (!currentFrame.IsBonusRoundAllowed)
                 {
                     ScoreRegularFrames(previousFrame, currentFrame, deliveryInputViewModel);
@@ -163,47 +170,52 @@ namespace BowlingWebApplication.Services
 
         private void ScoreRegularFrames(ScoreCardFrame prevScoreCardFrame, ScoreCardFrame currScoreCardFrame, DeliveryInputViewModel deliveryInputViewModel)
         {
-            if (prevScoreCardFrame.FrameId == 0)
+            if (currScoreCardFrame.FrameId == 0 & 
+                !currScoreCardFrame.FirstDeliveryMark.Equals(UserDeliveryMessages.STRIKE_DELIVERY_CODE) &&
+                !currScoreCardFrame.SecondDeliveryMark.Equals(UserDeliveryMessages.SPARE_DELIVERY_CODE))
             {
                 currScoreCardFrame.FrameCumulativeScore =
                     currScoreCardFrame.FirstDeliveryScore + currScoreCardFrame.SecondDeliveryScore;
-                return;
+                //return;
             }
-
-            if (prevScoreCardFrame.FirstDeliveryMark.Equals(UserDeliveryMessages.STRIKE_DELIVERY_CODE))
+            else if (!currScoreCardFrame.FirstDeliveryMark.Equals(UserDeliveryMessages.STRIKE_DELIVERY_CODE) &&
+                    !currScoreCardFrame.SecondDeliveryMark.Equals(UserDeliveryMessages.SPARE_DELIVERY_CODE))
             {
-                prevScoreCardFrame.FrameCumulativeScore = prevScoreCardFrame.FirstDeliveryScore +
+                currScoreCardFrame.FrameCumulativeScore = prevScoreCardFrame.FrameCumulativeScore +
                                                           currScoreCardFrame.FirstDeliveryScore +
                                                           currScoreCardFrame.SecondDeliveryScore;
             }
-            else if (deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.Spare)
-            {
-                prevScoreCardFrame.FrameCumulativeScore = prevScoreCardFrame.FirstDeliveryScore +
-                                                          currScoreCardFrame.FirstDeliveryScore;
-            }
 
-            if (!currScoreCardFrame.FirstDeliveryMark.Equals(UserDeliveryMessages.STRIKE_DELIVERY_CODE) &&
-                !currScoreCardFrame.SecondDeliveryMark.Equals(UserDeliveryMessages.SPARE_DELIVERY_CODE))
-            {
-                currScoreCardFrame.FrameCumulativeScore = prevScoreCardFrame.FrameCumulativeScore + 
-                                                          currScoreCardFrame.FirstDeliveryScore +
-                                                          currScoreCardFrame.SecondDeliveryScore; 
-            }
-             
+            //if (prevScoreCardFrame.FirstDeliveryMark.Equals(UserDeliveryMessages.STRIKE_DELIVERY_CODE))
+            //{
+            //    prevScoreCardFrame.FrameCumulativeScore = prevScoreCardFrame.FirstDeliveryScore +
+            //                                              currScoreCardFrame.FirstDeliveryScore +
+            //                                              currScoreCardFrame.SecondDeliveryScore;
+            //}
+            //else if (deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.Spare)
+            //{
+            //    prevScoreCardFrame.FrameCumulativeScore = prevScoreCardFrame.FirstDeliveryScore +
+            //                                              currScoreCardFrame.FirstDeliveryScore;
+            //}
+
         }
 
-        private void ScorePrevFrameForStrikesAndSpares(ScoreCardFrame prevScoreCardFrame,
-            ScoreCardFrame currScoreCardFrame, DeliveryInputViewModel deliveryInputViewModel)
+        private void ScorePrevFrameForStrikesAndSpares(ScoreCardFrame twoFramesBackFrame,
+                                                    ScoreCardFrame prevScoreCardFrame,
+                                                    ScoreCardFrame currScoreCardFrame, 
+                                                    DeliveryInputViewModel deliveryInputViewModel)
         {
             if (prevScoreCardFrame.SecondDeliveryMark.Equals(UserDeliveryMessages.STRIKE_DELIVERY_CODE))
             {
-                prevScoreCardFrame.FrameCumulativeScore = prevScoreCardFrame.SecondDeliveryScore
+                prevScoreCardFrame.FrameCumulativeScore = twoFramesBackFrame.FrameCumulativeScore
+                                                          + 10 
                                                           + currScoreCardFrame.FirstDeliveryScore 
                                                           + currScoreCardFrame.SecondDeliveryScore;
             }
             else if (prevScoreCardFrame.SecondDeliveryMark.Equals(UserDeliveryMessages.SPARE_DELIVERY_CODE))
             {
-                prevScoreCardFrame.FrameCumulativeScore = 10 + currScoreCardFrame.FirstDeliveryScore;
+                prevScoreCardFrame.FrameCumulativeScore = 10 + currScoreCardFrame.FirstDeliveryScore +
+                                                            twoFramesBackFrame.FrameCumulativeScore;
             }
         }
     }
