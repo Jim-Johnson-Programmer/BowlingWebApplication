@@ -23,17 +23,14 @@ namespace BowlingWebApplication.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IFrameScoringService _frameScoringService;
         private readonly IUserService _userService;
         private readonly IDeliveryService _deliveryService;
 
-        public HomeController(ILogger<HomeController> logger, 
-            IFrameScoringService frameScoringService,
+        public HomeController(ILogger<HomeController> logger,
             IUserService userService,
             IDeliveryService deliveryService)
         {
             _logger = logger;
-            _frameScoringService = frameScoringService;
             _userService = userService;
             _deliveryService = deliveryService;
         }

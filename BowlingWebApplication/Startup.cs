@@ -30,19 +30,7 @@ namespace BowlingWebApplication
 
             services.AddTransient<IDeliveryService, DeliveryService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IAllPinsMissedService, AllPinsMissedService>();
-            services.AddTransient<IPartialKnockDownPinsService, PartialKnockDownPinsService>();
-            services.AddTransient<IFoulScoringService, FoulScoringService>();
-            services.AddTransient<IStrikeScoringService, StrikeScoringService>();
-            services.AddTransient<ISpareScoringService, SpareScoringService>();
-            services.AddTransient<IFrameScoringService, FrameScoringService>();
             services.AddControllersWithViews();
-
-            //services.AddMvc().AddRazorPagesOptions(options=>
-            //{
-            //    options.Conventions
-            //        .AddPageRoute("/Home/BowlingGame", "");
-            //}).SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,31 +1,6 @@
 ﻿@model BowlingWebApplication.Models.ViewModel.DeliveryInputViewModel
+    <script src="~/js/BowlingDeliveryInput.js"></script>
 
-<html>
-<head>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            //on delivery choice of dropdown type, strike disable and set to 10
-            //on fault set to zero
-            //$("#playerDropdown").onchange(function() {
-            //        $.ajax({
-            //            type: "POST",
-            //            url: "/Home/GetUserDeliveryInfo",
-            //            data: { "selectedPlayerId": $(this).val()},
-            //        success: function (response) {
-            //            alert("Hello: " + response.Name + " .\nCurrent Date and Time: " + response.DateTime);
-            //        },
-            //        failure: function (response) {
-            //            alert(response.responseText);
-            //        },
-            //        error: function (response) {
-            //            alert(response.responseText);
-            //        }
-            //    });
-            //});
-        });
-    </script>
-</head>
-<body>
 <form class="m-1 p-1" asp-action="BowlingDeliveryInput" method="post">
     <div class="form-group">
         <label asp-for="CurrDeliveryInFrameCount">Delivery Number in this Frame</label>
@@ -40,7 +15,7 @@
     </div>
     <div class="form-group">
         <label asp-for="PreviousDeliveryPinsDown">Previous Pins Knocked Down</label>
-        <label>@Model.PreviousDeliveryPinsDown</label>
+        <label id="prevPinsDown">@Model.PreviousDeliveryPinsDown</label>
         @Html.Hidden("PreviousDeliveryPinsDown", @Model.PreviousDeliveryPinsDown)
     </div>
     <div class="form-group">
@@ -49,19 +24,22 @@
     </div>
     <div class="form-group">
         <label asp-for="SelectedDeliveryCode">Type of Delivery</label>
-        <select asp-for="SelectedDeliveryCode" asp-items="@Model.DeliveryTypes">
-            <option> - Select -</option>
+        <select id="dpDnDeliveryCode" asp-for="SelectedDeliveryCode" asp-items="@Model.DeliveryTypes">
+            <option>-select-</option>
         </select>
     </div>
     <div class="form-group">
         <label asp-for="SelectedPinsDownCount">Pins to Knock Down</label>
-        <select asp-for="SelectedPinsDownCount" asp-items="@Model.CountOfPinsAvailable">
-            <option> - Select -</option>
+        <select id="dpDnPinsDown" asp-for="SelectedPinsDownCount" asp-items="@Model.CountOfPinsAvailable">
+            <option>-select-</option>
         </select>
     </div>
     <div class="form-group">
         <input type="submit"/>
     </div>
 </form>
-</body>
-</html>
+@section Scripts
+{
+    <script src="~/jquery/jquery.min.js"></script>
+    <script src="~/js/BowlingDeliveryInput.js"></script>
+}
