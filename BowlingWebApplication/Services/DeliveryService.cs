@@ -94,8 +94,17 @@ namespace BowlingWebApplication.Services
             }
             else if (deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.Strike)
             {
-                cardFrame.SecondDeliveryScore = 10;
-                cardFrame.SecondDeliveryMark = UserDeliveryMessages.STRIKE_DELIVERY_CODE;
+                if (deliveryInputViewModel.FrameIndex == 9)
+                {
+                    cardFrame.FirstDeliveryScore = 10;
+                    cardFrame.FirstDeliveryMark = UserDeliveryMessages.STRIKE_DELIVERY_CODE;
+                }
+                else
+                {
+                    cardFrame.SecondDeliveryScore = 10;
+                    cardFrame.SecondDeliveryMark = UserDeliveryMessages.STRIKE_DELIVERY_CODE;
+                }
+                
             }
             else if (deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.StandardRoll)
             {
@@ -228,8 +237,8 @@ namespace BowlingWebApplication.Services
             }
             else if (prevScoreCardFrame.SecondDeliveryMark.Equals(UserDeliveryMessages.SPARE_DELIVERY_CODE))
             {
-                prevScoreCardFrame.FrameCumulativeScore = 10 + currScoreCardFrame.FirstDeliveryScore +
-                                                            twoFramesBackFrame.FrameCumulativeScore;
+                prevScoreCardFrame.FrameCumulativeScore = twoFramesBackFrame.FrameCumulativeScore + 
+                                                          10 + currScoreCardFrame.FirstDeliveryScore;
             }
         }
     }

@@ -77,7 +77,6 @@ namespace BowlingWebApplication.Controllers
             int prevDeliveryType, int prevPinsDown)
         {
             ScoreCardViewModel scoreCardViewModel = JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
-            //scoreCardViewModel.CurrentFrameId = currFrameId;//save back into cache
 
             DeliveryInputViewModel deliveryInputViewModel = new DeliveryInputViewModel();
             deliveryInputViewModel.FrameIndex = currFrameId;
@@ -100,18 +99,43 @@ namespace BowlingWebApplication.Controllers
                 new SelectListItem() {Text = "Standard Roll", Value = ((int) FrameStatusEnum.StandardRoll).ToString()}
             };
 
-            if (prevDeliveryType == 0)
+            //first 9 frames should offer a strike only on first roll/delivery, as that ends the frame
+            if (prevDeliveryType == 0 && currFrameId<9)  
             {
                 deliveryInputViewModel.DeliveryTypes.Add(new SelectListItem()
                     {Text = "Strike", Value = ((int) FrameStatusEnum.Strike).ToString()});
-            }
-            else if (prevDeliveryType != 0)
+            }//tenth frame should provide option for all strikes 
+            else if (prevDeliveryType != 0 && currFrameId < 9)//only 2nd roll should provide a spare option
             {
                 deliveryInputViewModel.DeliveryTypes.Add(new SelectListItem()
-                    {Text = "Spare", Value = ((int) FrameStatusEnum.Spare).ToString()});
+                    { Text = "Spare", Value = ((int)FrameStatusEnum.Spare).ToString() });
+            }
+            else if (currFrameId == 9)
+            {//
+                if (currDeliveryInFrameIndex==0)
+                {
+                    deliveryInputViewModel.DeliveryTypes.Add(new SelectListItem()
+                    { Text = "Strike", Value = ((int)FrameStatusEnum.Strike).ToString() });
+
+                }
+                else 
+                {
+                    if (prevDeliveryType == (int)FrameStatusEnum.Strike ||
+                        prevDeliveryType == (int)FrameStatusEnum.Spare)
+                    {
+                        deliveryInputViewModel.DeliveryTypes.Add(new SelectListItem()
+                        { Text = "Strike", Value = ((int)FrameStatusEnum.Strike).ToString() });
+                    }
+                    else
+                    {
+                        deliveryInputViewModel.DeliveryTypes.Add(new SelectListItem()
+                        { Text = "Spare", Value = ((int)FrameStatusEnum.Spare).ToString() });
+                    }
+                }
             }
 
             deliveryInputViewModel.CountOfPinsAvailable = new List<SelectListItem>();
+            //can't be null, but not sure if populating is needed given js manipulation
             for (int i = 1; i < 10 - prevPinsDown; i++)
             {
                 deliveryInputViewModel.CountOfPinsAvailable.Add(
@@ -127,6 +151,7 @@ namespace BowlingWebApplication.Controllers
             //using session state in place of database for small demo and persistence between pages.
             ScoreCardViewModel scoreCardViewModel = JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
             
+            //validation failed, selection and field info persists, dpdn collections must be reloaded...
             if (!ModelState.IsValid)
             {
                 DeliveryInputViewModel invalidViewModel = LoadDeliveryInputViewModel(deliveryInputViewModel.CurrentRowIndex,
@@ -139,8 +164,12 @@ namespace BowlingWebApplication.Controllers
 
             _deliveryService.SaveDelivery(scoreCardViewModel, deliveryInputViewModel);
 
+
+            //for non10th frames where first roll is not a strike
+                //hand off values to cache collection and increment delivery/roll index to never exceed 0 or 1
             if (scoreCardViewModel.CurrentFrameId < 9 &&
-                deliveryInputViewModel.CurrDeliveryInFrameIndex < 1)
+                deliveryInputViewModel.CurrDeliveryInFrameIndex == 0 &&
+                deliveryInputViewModel.SelectedDeliveryCode != (int)FrameStatusEnum.Strike)
             {
                 scoreCardViewModel.PreviousPinDownCount = deliveryInputViewModel.SelectedPinsDownCount;
                 scoreCardViewModel.PreviousDeliveryType = deliveryInputViewModel.SelectedDeliveryCode;
@@ -148,7 +177,7 @@ namespace BowlingWebApplication.Controllers
                     deliveryInputViewModel.CurrDeliveryInFrameIndex == 1
                         ? 0
                         : ++deliveryInputViewModel.CurrDeliveryInFrameIndex;
-            }
+            }//strike or second roll for non10th frames, zero out roll data and increment frame index;
             else if (scoreCardViewModel.CurrentFrameId < 9 &&
                 (deliveryInputViewModel.CurrDeliveryInFrameIndex == 1 ||
                  deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.Strike))
@@ -158,7 +187,7 @@ namespace BowlingWebApplication.Controllers
                 scoreCardViewModel.CurrentDeliveryInFrameIndex = 0;
                 ++scoreCardViewModel.CurrentFrameId;
             }
-            else
+            else//handle 10th frame, never exceed 2 in roll index and pass selections to cache
             {
                 scoreCardViewModel.PreviousPinDownCount = deliveryInputViewModel.SelectedPinsDownCount;
                 scoreCardViewModel.PreviousDeliveryType = deliveryInputViewModel.SelectedDeliveryCode;
