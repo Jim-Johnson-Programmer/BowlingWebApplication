@@ -10,7 +10,7 @@ namespace BowlingWebApplication.Models.ViewModel
         }
 
         public int CurrentFrameId { get; set; }
-        public int CurrentDeliveryInFrameCount { get; set; }
+        public int CurrentDeliveryInFrameIndex { get; set; }
         public int CurrentPlayerId { get; set; }
         public int PreviousPinDownCount { get; set; }
         public int PreviousDeliveryType { get; set; }

@@ -9,10 +9,10 @@ namespace BowlingWebApplication.Models.ViewModel
 {
     public class DeliveryInputViewModel
     {
+        public int CurrentRowIndex { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int FrameIndex { get; set; }
-        public int CurrDeliveryInFrameCount { get; set; }
         public int CurrDeliveryInFrameIndex { get; set; }
         public int PlayerId { get; set; }
         public List<SelectListItem> DeliveryTypes { get; set; }

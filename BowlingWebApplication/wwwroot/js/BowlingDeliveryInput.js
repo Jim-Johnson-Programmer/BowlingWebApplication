@@ -28,7 +28,7 @@
             $('#dpDnPinsDown').prop('disabled', false);
             $('#dpDnPinsDown option').remove();
             $("#dpDnPinsDown").append($('<option></option>').val('').html('-select-'));
-            for (var i = 1; i <= 9 - prevPinsDown; i++) {
+            for (var i = 1; i <= 8 - prevPinsDown; i++) {
                 $("#dpDnPinsDown").append($('<option></option>').val(i).html(i));
             }
             break;
@@ -43,10 +43,8 @@
             $('#dpDnPinsDown').prop('disabled', false);
             $('#dpDnPinsDown option').remove();
             $("#dpDnPinsDown").append($('<option></option>').val('').html('-select-'));
-            let maxPins = 10;
-            if (prevPinsDown > 0) maxPins = 9;
-                for (var i = 1; i <= maxPins - prevPinsDown; i++) {
-                $("#dpDnPinsDown").append($('<option></option>').val(i).html(i));
+            for (var i = 1; i <= 9 - prevPinsDown; i++) {
+                    $("#dpDnPinsDown").append($('<option></option>').val(i).html(i));
             }
             break;
         default:

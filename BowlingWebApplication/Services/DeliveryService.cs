@@ -34,11 +34,11 @@ namespace BowlingWebApplication.Services
                     .ScoreCardFrames[scoreCardViewModel.CurrentFrameId - 2];
             }
 
-            if (deliveryInputViewModel.CurrDeliveryInFrameCount == 1)
+            if (deliveryInputViewModel.CurrDeliveryInFrameIndex == 0)
             {
                 MarkFirstDelivery(currentFrame, deliveryInputViewModel);
             }
-            else if (deliveryInputViewModel.CurrDeliveryInFrameCount == 2)
+            else if (deliveryInputViewModel.CurrDeliveryInFrameIndex == 1)
             {
                 MarkSecondDelivery(currentFrame, deliveryInputViewModel);
                 ScorePrevFrameForStrikesAndSpares( twoFramesBackFrame, previousFrame, currentFrame, deliveryInputViewModel);

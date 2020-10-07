@@ -66,21 +66,32 @@ namespace BowlingWebApplication.Controllers
 
 
         [HttpGet]
-        public IActionResult BowlingDeliveryInput(int playerId, int currRowIndex, int currFrameId, int currDeliveryInFrameCt, int prevDeliveryType, int prevPinsDown)
+        public IActionResult BowlingDeliveryInput(int playerId, int currRowIndex, int currFrameId, int currDeliveryInFrameIndex, int prevDeliveryType, int prevPinsDown)
         {
-            var deliveryInputViewModel = DeliveryInputViewModel(currRowIndex, currFrameId, currDeliveryInFrameCt, prevDeliveryType, prevPinsDown);
+            var deliveryInputViewModel = LoadDeliveryInputViewModel(currRowIndex, currFrameId, currDeliveryInFrameIndex, prevDeliveryType, prevPinsDown);
 
             return View(deliveryInputViewModel);
         }
 
-        private DeliveryInputViewModel DeliveryInputViewModel(int currRowIndex, int currFrameId, int currDeliveryInFrameCt,
+        private DeliveryInputViewModel LoadDeliveryInputViewModel(int currRowIndex, int currFrameId, int currDeliveryInFrameIndex,
             int prevDeliveryType, int prevPinsDown)
         {
-            ScoreCardViewModel scoreCardViewModel =
-                JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
-            scoreCardViewModel.CurrentFrameId = currFrameId;
+            ScoreCardViewModel scoreCardViewModel = JsonConvert.DeserializeObject<ScoreCardViewModel>(HttpContext.Session.GetString("GameFullData"));
+            //scoreCardViewModel.CurrentFrameId = currFrameId;//save back into cache
 
             DeliveryInputViewModel deliveryInputViewModel = new DeliveryInputViewModel();
+            deliveryInputViewModel.FrameIndex = currFrameId;
+            deliveryInputViewModel.PreviousDeliveryPinsDown = prevPinsDown;
+            deliveryInputViewModel.PreviousDeliveryTypeText = _deliveryService.GetDeliveryStatusText(prevDeliveryType);
+            deliveryInputViewModel.FirstName = scoreCardViewModel.ScoreCardRows[currRowIndex].FirstName;
+            deliveryInputViewModel.LastName = scoreCardViewModel.ScoreCardRows[currRowIndex].LastName;
+            deliveryInputViewModel.CurrentRowIndex = currRowIndex;
+            deliveryInputViewModel.PreviousDeliveryTypeCode = prevDeliveryType;
+
+            if (currFrameId < 10)
+            {
+                deliveryInputViewModel.CurrDeliveryInFrameIndex = currDeliveryInFrameIndex;
+            }
             deliveryInputViewModel.DeliveryTypes = new List<SelectListItem>()
             {
                 new SelectListItem() {Text = "Split", Value = ((int) FrameStatusEnum.Split).ToString()},
@@ -101,21 +112,10 @@ namespace BowlingWebApplication.Controllers
             }
 
             deliveryInputViewModel.CountOfPinsAvailable = new List<SelectListItem>();
-            for (int i = 1; i <= 10 - prevPinsDown; i++)
+            for (int i = 1; i < 10 - prevPinsDown; i++)
             {
                 deliveryInputViewModel.CountOfPinsAvailable.Add(
                     new SelectListItem() {Text = i.ToString(), Value = i.ToString()});
-            }
-
-            deliveryInputViewModel.PreviousDeliveryPinsDown = prevPinsDown;
-            deliveryInputViewModel.PreviousDeliveryTypeText = _deliveryService.GetDeliveryStatusText(prevDeliveryType);
-            deliveryInputViewModel.FirstName = scoreCardViewModel.ScoreCardRows[currRowIndex].FirstName;
-            deliveryInputViewModel.LastName = scoreCardViewModel.ScoreCardRows[currRowIndex].LastName;
-
-            if (currFrameId < 10)
-            {
-                deliveryInputViewModel.CurrDeliveryInFrameIndex = currDeliveryInFrameCt;
-                deliveryInputViewModel.CurrDeliveryInFrameCount = currDeliveryInFrameCt + 1;
             }
 
             return deliveryInputViewModel;
@@ -129,36 +129,43 @@ namespace BowlingWebApplication.Controllers
             
             if (!ModelState.IsValid)
             {
-                return View(deliveryInputViewModel);
+                DeliveryInputViewModel invalidViewModel = LoadDeliveryInputViewModel(deliveryInputViewModel.CurrentRowIndex,
+                                                                                    deliveryInputViewModel.FrameIndex,
+                                                                                    deliveryInputViewModel.CurrDeliveryInFrameIndex,
+                                                                                    deliveryInputViewModel.PreviousDeliveryTypeCode,
+                                                                                    deliveryInputViewModel.PreviousDeliveryPinsDown);
+                return View(invalidViewModel);
             }
 
             _deliveryService.SaveDelivery(scoreCardViewModel, deliveryInputViewModel);
 
-            ////save selected info into past info
             if (scoreCardViewModel.CurrentFrameId < 9 &&
-                (deliveryInputViewModel.CurrDeliveryInFrameCount == 2 ||
+                deliveryInputViewModel.CurrDeliveryInFrameIndex < 1)
+            {
+                scoreCardViewModel.PreviousPinDownCount = deliveryInputViewModel.SelectedPinsDownCount;
+                scoreCardViewModel.PreviousDeliveryType = deliveryInputViewModel.SelectedDeliveryCode;
+                scoreCardViewModel.CurrentDeliveryInFrameIndex =
+                    deliveryInputViewModel.CurrDeliveryInFrameIndex == 1
+                        ? 0
+                        : ++deliveryInputViewModel.CurrDeliveryInFrameIndex;
+            }
+            else if (scoreCardViewModel.CurrentFrameId < 9 &&
+                (deliveryInputViewModel.CurrDeliveryInFrameIndex == 1 ||
                  deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.Strike))
             {
                 scoreCardViewModel.PreviousPinDownCount = 0;
                 scoreCardViewModel.PreviousDeliveryType = 0;
-                scoreCardViewModel.CurrentDeliveryInFrameCount = 0;
-                scoreCardViewModel.CurrentFrameId++;
+                scoreCardViewModel.CurrentDeliveryInFrameIndex = 0;
+                ++scoreCardViewModel.CurrentFrameId;
             }
-            else if (scoreCardViewModel.CurrentFrameId < 9 &&
-                     deliveryInputViewModel.CurrDeliveryInFrameCount < 2)
+            else
             {
                 scoreCardViewModel.PreviousPinDownCount = deliveryInputViewModel.SelectedPinsDownCount;
                 scoreCardViewModel.PreviousDeliveryType = deliveryInputViewModel.SelectedDeliveryCode;
-                scoreCardViewModel.CurrentDeliveryInFrameCount =
-                    deliveryInputViewModel.CurrDeliveryInFrameCount == 2
+                scoreCardViewModel.CurrentDeliveryInFrameIndex =
+                    deliveryInputViewModel.CurrDeliveryInFrameIndex == 3
                         ? 0
-                        : deliveryInputViewModel.CurrDeliveryInFrameCount;
-            }
-            else if(scoreCardViewModel.CurrentFrameId==9)
-            {
-                scoreCardViewModel.PreviousPinDownCount = deliveryInputViewModel.SelectedPinsDownCount;
-                scoreCardViewModel.PreviousDeliveryType = deliveryInputViewModel.SelectedDeliveryCode;
-                ++scoreCardViewModel.CurrentDeliveryInFrameCount;
+                        : ++deliveryInputViewModel.CurrDeliveryInFrameIndex;
             }
 
             HttpContext.Session.SetString("GameFullData", JsonConvert.SerializeObject(scoreCardViewModel));
