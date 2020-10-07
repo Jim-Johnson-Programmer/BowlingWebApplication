@@ -61,19 +61,27 @@
                             <div class="float-none cumuluative-scoring-box">
                                 @if (frameCounter == Model.CurrentFrameId)
                                 {
-                                    <div class="font-weight-bold cumulative-cells-height">
-                                        <a href="~/Home/BowlingDeliveryInput?playerId=@rowItem.PlayerId&currRowIndex=@Model.CurrentScoreCardRowIndex&currFrameId=@frameCounter&currDeliveryInFrameIndex=@Model.CurrentDeliveryInFrameIndex&prevDeliveryType=@Model.PreviousDeliveryType&prevPinsDown=@Model.PreviousPinDownCount">Roll ball</a>
-                                    </div>
+                                    @if (Model.IsUserGameComplete)
+                                    {
+                                        <div class="font-weight-bold cumulative-cells-height">@rowItem.ScoreCardFrames[frameCounter].FrameCumulativeScore</div>
+                                    }
+                                    else
+                                    {
+
+                                        <div class="font-weight-bold cumulative-cells-height">
+                                            <a href="~/Home/BowlingDeliveryInput?playerId=@rowItem.PlayerId&currRowIndex=@Model.CurrentScoreCardRowIndex&currFrameId=@frameCounter&currDeliveryInFrameIndex=@Model.CurrentDeliveryInFrameIndex&prevDeliveryType=@Model.PreviousDeliveryType&prevPinsDown=@Model.PreviousPinDownCount">Roll ball</a>
+                                        </div>
+                                    }
                                 }
                                 else
                                 {
-                                    if (@rowItem.ScoreCardFrames[frameCounter].FrameCumulativeScore==0)
+                                    if (@rowItem.ScoreCardFrames[frameCounter].FrameCumulativeScore == 0)
                                     {
                                         <div class="font-weight-bold cumulative-cells-height"> </div>
                                     }
                                     else
                                     {
-                                        <div class="font-weight-bold cumulative-cells-height">@rowItem.ScoreCardFrames[frameCounter].FrameCumulativeScore</div>    
+                                        <div class="font-weight-bold cumulative-cells-height">@rowItem.ScoreCardFrames[frameCounter].FrameCumulativeScore</div>
                                     }
                                 }
                             </div>

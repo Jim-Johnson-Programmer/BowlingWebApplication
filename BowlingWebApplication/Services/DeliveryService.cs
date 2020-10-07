@@ -34,24 +34,44 @@ namespace BowlingWebApplication.Services
                     .ScoreCardFrames[scoreCardViewModel.CurrentFrameId - 2];
             }
 
-            if (deliveryInputViewModel.CurrDeliveryInFrameIndex == 0)
+            if (deliveryInputViewModel.CurrDeliveryInFrameIndex == 0 &&
+                deliveryInputViewModel.FrameIndex<9)
             {
                 MarkFirstDelivery(currentFrame, deliveryInputViewModel);
             }
-            else if (deliveryInputViewModel.CurrDeliveryInFrameIndex == 1)
+            else if (deliveryInputViewModel.CurrDeliveryInFrameIndex == 1 &&
+                     deliveryInputViewModel.FrameIndex < 9)
             {
                 MarkSecondDelivery(currentFrame, deliveryInputViewModel);
                 ScorePrevFrameForStrikesAndSpares( twoFramesBackFrame, previousFrame, currentFrame, deliveryInputViewModel);
-                if (!currentFrame.IsBonusRoundAllowed)
+                ScoreRegularFrames(previousFrame, currentFrame, deliveryInputViewModel);
+            }
+
+            if (deliveryInputViewModel.FrameIndex == 9 && 
+                deliveryInputViewModel.CurrDeliveryInFrameIndex == 0)
+            {
+                MarkFirstDelivery(currentFrame, deliveryInputViewModel);
+            }
+            else if (deliveryInputViewModel.FrameIndex == 9 && 
+                     deliveryInputViewModel.CurrDeliveryInFrameIndex == 1)
+            {
+                MarkSecondDelivery(currentFrame, deliveryInputViewModel);
+                if (deliveryInputViewModel.FrameIndex == 9 && 
+                    deliveryInputViewModel.SelectedDeliveryCode != (int)FrameStatusEnum.Strike &&
+                    deliveryInputViewModel.SelectedDeliveryCode != (int)FrameStatusEnum.Spare)
                 {
-                    ScoreRegularFrames(previousFrame, currentFrame, deliveryInputViewModel);
+                    ScoreTenthFrame(previousFrame, currentFrame, deliveryInputViewModel);
+                    scoreCardViewModel.IsUserGameComplete = true;
                 }
             }
-            else
+            else if (deliveryInputViewModel.FrameIndex == 9 && 
+                    deliveryInputViewModel.CurrDeliveryInFrameIndex == 2)
             {
                 MarkTenthFrameBonusDeliveries(currentFrame, deliveryInputViewModel);
-                ScoreTenthFrame(currentFrame, deliveryInputViewModel);
+                ScoreTenthFrame(previousFrame, currentFrame, deliveryInputViewModel);
+                scoreCardViewModel.IsUserGameComplete = true;
             }
+
         }
 
         private void MarkFirstDelivery(ScoreCardFrame cardFrame, DeliveryInputViewModel deliveryInputViewModel)
@@ -115,13 +135,6 @@ namespace BowlingWebApplication.Services
                 scoreCardFrame.SecondDeliveryScore = deliveryInputViewModel.SelectedPinsDownCount;
                 scoreCardFrame.SecondDeliveryMark = deliveryInputViewModel.SelectedPinsDownCount.ToString();
             }
-
-            if (deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.Strike && 
-                deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.Spare && 
-                deliveryInputViewModel.FrameIndex>8)
-            {
-                scoreCardFrame.IsBonusRoundAllowed = true;
-            }
         }
 
         private void MarkTenthFrameBonusDeliveries(ScoreCardFrame scoreCardFrame,DeliveryInputViewModel deliveryInputViewModel)
@@ -129,7 +142,7 @@ namespace BowlingWebApplication.Services
             if (deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.Strike)
             {
                 scoreCardFrame.BonusDeliveryMark = UserDeliveryMessages.STRIKE_DELIVERY_CODE;
-                scoreCardFrame.BonusDeliveryScore = 0;
+                scoreCardFrame.BonusDeliveryScore = 10;
             }
             else if (deliveryInputViewModel.SelectedDeliveryCode == (int)FrameStatusEnum.OpenFrame)
             {
@@ -161,11 +174,12 @@ namespace BowlingWebApplication.Services
             }
         }
 
-        private void ScoreTenthFrame(ScoreCardFrame scoreCardFrame, DeliveryInputViewModel deliveryInputViewModel)
+        private void ScoreTenthFrame(ScoreCardFrame prevFrame, ScoreCardFrame tenthFrame, DeliveryInputViewModel deliveryInputViewModel)
         {
-            scoreCardFrame.FrameCumulativeScore = scoreCardFrame.FirstDeliveryScore +
-                                                  scoreCardFrame.SecondDeliveryScore +
-                                                  scoreCardFrame.BonusDeliveryScore;
+            tenthFrame.FrameCumulativeScore = prevFrame.FrameCumulativeScore +
+                                                tenthFrame.FirstDeliveryScore +
+                                                  tenthFrame.SecondDeliveryScore +
+                                                  tenthFrame.BonusDeliveryScore;
         }
 
         private void ScoreRegularFrames(ScoreCardFrame prevScoreCardFrame, ScoreCardFrame currScoreCardFrame, DeliveryInputViewModel deliveryInputViewModel)

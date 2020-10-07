@@ -10,6 +10,7 @@ namespace BowlingWebApplication.Models.ViewModel
         }
 
         public int CurrentFrameId { get; set; }
+        public bool IsUserGameComplete { get; set; }
         public int CurrentDeliveryInFrameIndex { get; set; }
         public int CurrentPlayerId { get; set; }
         public int PreviousPinDownCount { get; set; }
